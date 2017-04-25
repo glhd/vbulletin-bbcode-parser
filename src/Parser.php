@@ -2,6 +2,8 @@
 
 namespace Galahad\Bbcode;
 
+use Illuminate\Support\Collection;
+
 /**
  * Class Parser
  *
@@ -10,9 +12,22 @@ namespace Galahad\Bbcode;
  */
 class Parser
 {
-    public function __construct()
+    /**
+     * @var string
+     */
+    protected $pattern = '/\[(\w+)(="?([\w\+]+)"?)?\]([^\[]+)\[\/\w+\]/i';
+
+    /**
+     * @var string
+     */
+    protected $originalText;
+
+    /**
+     * @param string $originalText
+     */
+    public function __construct($originalText)
     {
-        //
+        $this->originalText = $originalText;
     }
 
     public function toHtml()
@@ -20,8 +35,22 @@ class Parser
         //
     }
 
-    public function toBbcode()
+    public function parse()
     {
-        //
+
+    }
+
+    /**
+     * @return Collection
+     */
+    public function fetchTags()
+    {
+        preg_match_all($this->pattern, $this->originalText, $matches, PREG_SET_ORDER);
+
+        return collect($matches)->map(function (array $match) {
+            list(, $tag, , $attribute, $content) = $match;
+
+            return new Tag($tag, $content, $attribute ?: null);
+        });
     }
 }

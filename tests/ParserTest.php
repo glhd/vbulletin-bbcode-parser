@@ -4,6 +4,7 @@ namespace Galahad\Bbcode\Tests;
 
 use Galahad\Bbcode\Parser;
 use Galahad\Bbcode\Tag;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,14 +18,15 @@ class ParserTest extends TestCase
     /**
      * @test
      */
-    public function parseInstance()
+    public function fetchTags()
     {
         $text = 'This is a [color=red]red color[/color] text.';
-        $tag = (new Parser($text))->parse();
+        $tags = (new Parser($text))->fetchTags();
 
-        $this->assertInstanceOf(Tag::class, $tag);
-        $this->assertEquals('color', $tag->getName());
-        $this->assertEquals('red', $tag->getAttribute());
-        $this->assertEquals('red color', $tag->getContent());
+        $this->assertInstanceOf(Collection::class, $tags);
+        $this->assertInstanceOf(Tag::class, $tags->first());
+        $this->assertEquals('color', $tags->first()->getName());
+        $this->assertEquals('red', $tags->first()->getAttribute());
+        $this->assertEquals('red color', $tags->first()->getContent());
     }
 }

@@ -8,7 +8,7 @@ namespace Galahad\Bbcode;
  * @package Galahad\Bbcode
  * @author Junior Grossi <juniorgro@gmail.com>
  */
-abstract class Tag
+class Tag
 {
     /**
      * @var string
@@ -40,5 +40,24 @@ abstract class Tag
     /**
      * @return string
      */
-    abstract public function build();
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
 }
