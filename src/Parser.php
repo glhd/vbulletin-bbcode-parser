@@ -43,7 +43,7 @@ class Parser
     /**
      * @return Collection
      */
-    public function fetchTags()
+    protected function fetchTags()
     {
         preg_match_all($this->pattern, $this->originalText, $matches, PREG_SET_ORDER);
 

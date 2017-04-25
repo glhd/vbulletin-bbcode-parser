@@ -6,6 +6,7 @@ use Galahad\Bbcode\Parser;
 use Galahad\Bbcode\Tag;
 use Illuminate\Support\Collection;
 use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
 /**
  * Class ParserTest
@@ -21,12 +22,27 @@ class ParserTest extends TestCase
     public function fetchTags()
     {
         $text = 'This is a [color=red]red color[/color] text.';
-        $tags = (new Parser($text))->fetchTags();
+        $tags = $this->callParserMethod($text, 'fetchTags');
 
         $this->assertInstanceOf(Collection::class, $tags);
         $this->assertInstanceOf(Tag::class, $tags->first());
         $this->assertEquals('color', $tags->first()->getName());
         $this->assertEquals('red', $tags->first()->getAttribute());
         $this->assertEquals('red color', $tags->first()->getContent());
+    }
+
+    /**
+     * @param string $text
+     * @param string|null $method
+     * @param array $parameters
+     * @return Parser
+     */
+    private function callParserMethod($text, $method = null, $parameters = [])
+    {
+        $reflection = new ReflectionClass(Parser::class);
+        $method = $reflection->getMethod($method);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs(new Parser($text), $parameters);
     }
 }
