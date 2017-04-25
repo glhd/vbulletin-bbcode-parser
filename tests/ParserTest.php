@@ -2,6 +2,7 @@
 
 namespace Galahad\Bbcode\Tests;
 
+use Galahad\Bbcode\Exception\MissingTagException;
 use Galahad\Bbcode\Parser;
 use PHPUnit\Framework\TestCase;
 
@@ -25,5 +26,16 @@ class ParserTest extends TestCase
             'This is a <span style="color: red;">red color</span> text.',
             $parser->toHtml()
         );
+    }
+
+    /**
+     * @test
+     */
+    public function missingTagException()
+    {
+        $this->expectException(MissingTagException::class);
+
+        $parser = new Parser('Text [fake]to fail[/fake]');
+        $parser->toHtml();
     }
 }
