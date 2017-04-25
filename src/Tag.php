@@ -55,7 +55,7 @@ class Tag
      * @return string
      * @throws \Exception
      */
-    public function toHtml()
+    public function render()
     {
         $method = 'tag'.ucfirst($this->name);
 

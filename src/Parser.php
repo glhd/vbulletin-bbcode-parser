@@ -18,34 +18,20 @@ class Parser
     protected $pattern = '/\[(\w+)(="?([\w\+]+)"?)?\]([^\[]+)\[\/\w+\]/i';
 
     /**
-     * @var string
-     */
-    protected $text;
-
-    /**
      * @param string $text
-     */
-    public function __construct($text)
-    {
-        $this->text = $text;
-    }
-
-    /**
      * @return string
      */
-    public function toHtml()
+    public function parse($text)
     {
-        $text = $this->text;
-
         preg_match_all(
-            $this->pattern, $this->text, $matches, PREG_SET_ORDER
+            $this->pattern, $text, $matches, PREG_SET_ORDER
         );
 
         foreach ($matches as $match) {
             list($string, $name, , $attribute, $content) = $match;
 
             $tag = new Tag($name, $content, $attribute);
-            $text = str_replace($string, $tag->toHtml(), $text);
+            $text = str_replace($string, $tag->render(), $text);
         }
 
         return $text;

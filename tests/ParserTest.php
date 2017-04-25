@@ -20,11 +20,11 @@ class ParserTest extends TestCase
     public function parseColor()
     {
         $text = 'This is a [color=red]red color[/color] text.';
-        $parser = new Parser($text);
+        $parser = new Parser();
 
         $this->assertEquals(
             'This is a <span style="color: red;">red color</span> text.',
-            $parser->toHtml()
+            $parser->parse($text)
         );
     }
 
@@ -35,7 +35,7 @@ class ParserTest extends TestCase
     {
         $this->expectException(MissingTagException::class);
 
-        $parser = new Parser('Text [fake]to fail[/fake]');
-        $parser->toHtml();
+        $parser = new Parser();
+        $parser->parse('Text [fake]to fail[/fake]');
     }
 }
