@@ -75,4 +75,31 @@ class Tag
     {
         return $this->attribute;
     }
+
+    /**
+     * @return string
+     */
+    public function tagColor()
+    {
+        return sprintf(
+            '<span style="color: %s;">%s</span>',
+            $this->attribute,
+            $this->content
+        );
+    }
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    public function toHtml()
+    {
+        $method = 'tag'.ucfirst($this->name);
+
+        if (method_exists($this, $method)) {
+            return $this->$method();
+        }
+
+        throw new \Exception("Missing parser for $this->name tag");
+    }
 }

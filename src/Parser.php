@@ -23,42 +23,30 @@ class Parser
     protected $text;
 
     /**
-     * @var Collection
-     */
-    protected $tags;
-
-    /**
      * @param string $text
      */
     public function __construct($text)
     {
         $this->text = $text;
-        $this->tags = $this->fetchTags();
-    }
-
-    public function toHtml()
-    {
-
-    }
-
-    public function parse()
-    {
-
     }
 
     /**
-     * @return Collection
+     * @return string
      */
-    protected function fetchTags()
+    public function toHtml()
     {
-        preg_match_all($this->pattern, $this->text, $matches, PREG_SET_ORDER);
+        $text = $this->text;
 
-        return collect($matches)->map(function (array $match) {
-            list($tag, $name, , $attribute, $content) = $match;
+        preg_match_all(
+            $this->pattern, $this->text, $matches, PREG_SET_ORDER
+        );
 
-            return new Tag(
-                $tag, $name, $content, $attribute ?: null
-            );
-        });
+        foreach ($matches as $match) {
+            list($string, $name, , $attribute, $content) = $match;
+            $tag = new Tag($string, $name, $content, $attribute ?: null);
+            $text = str_replace($string, $tag->toHtml(), $text);
+        }
+
+        return $text;
     }
 }
