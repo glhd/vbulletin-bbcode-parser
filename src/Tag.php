@@ -2,6 +2,8 @@
 
 namespace Galahad\Bbcode;
 
+use Galahad\Bbcode\Exception\MissingTagException;
+
 /**
  * Class Tag
  *
@@ -61,6 +63,6 @@ class Tag
             return $this->$method();
         }
 
-        throw new \Exception("Missing parser for $this->name tag");
+        throw new MissingTagException("Missing parser for $this->name tag");
     }
 }
