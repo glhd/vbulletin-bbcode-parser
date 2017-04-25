@@ -43,7 +43,8 @@ class Parser
 
         foreach ($matches as $match) {
             list($string, $name, , $attribute, $content) = $match;
-            $tag = new Tag($string, $name, $content, $attribute ?: null);
+
+            $tag = new Tag($name, $content, $attribute);
             $text = str_replace($string, $tag->toHtml(), $text);
         }
 
