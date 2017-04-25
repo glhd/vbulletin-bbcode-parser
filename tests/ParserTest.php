@@ -26,6 +26,8 @@ class ParserTest extends TestCase
 
         $this->assertInstanceOf(Collection::class, $tags);
         $this->assertInstanceOf(Tag::class, $tags->first());
+
+        $this->assertEquals('[color=red]red color[/color]', $tags->first()->getTag());
         $this->assertEquals('color', $tags->first()->getName());
         $this->assertEquals('red', $tags->first()->getAttribute());
         $this->assertEquals('red color', $tags->first()->getContent());
@@ -35,7 +37,7 @@ class ParserTest extends TestCase
      * @param string $text
      * @param string|null $method
      * @param array $parameters
-     * @return Parser
+     * @return mixed
      */
     private function callParserMethod($text, $method = null, $parameters = [])
     {
