@@ -20,12 +20,30 @@ class ParserTest extends TestCase
     public function parseColor()
     {
         $text = 'This is a [color=red]red color[/color] text.';
-        $parser = new Parser();
 
         $this->assertEquals(
             'This is a <span style="color: red;">red color</span> text.',
-            $parser->parse($text)
+            $this->parser()->parse($text)
         );
+    }
+
+    /**
+     * @test
+     */
+    public function parseSize()
+    {
+        $tests = [
+            '1' => '60%', '2' => '89%', '3' => '100%', '4' => '120%', '5' => '150%',
+            '6' => '200%', '7' => '300%', '+1' => '120%', '+2' => '150%', '-1' => '89%',
+            '-2' => '60%', 'medium' => 'medium', 'small' => 'small', 'x-large' => 'x-large',
+        ];
+
+        foreach ($tests as $size => $expected) {
+            $this->assertEquals(
+                "<span style=\"font-size: $expected;\">This is awesome</span>",
+                $this->parser()->parse("[size=$size]This is awesome[/size]")
+            );
+        }
     }
 
     /**
@@ -37,5 +55,13 @@ class ParserTest extends TestCase
 
         $parser = new Parser();
         $parser->parse('Text [fake]to fail[/fake]');
+    }
+
+    /**
+     * @return Parser
+     */
+    private function parser()
+    {
+        return new Parser();
     }
 }

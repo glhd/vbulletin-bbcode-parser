@@ -55,6 +55,44 @@ class Tag
     }
 
     /**
+     * @return string
+     * @see http://style.cleverchimp.com/font_size_intervals/altintervals.html#bbs
+     */
+    public function tagSize()
+    {
+        $this->validateAttribute();
+
+        // TODO 'small', 'x-large', etc
+
+        $scale = [60, 89, 100, 120, 150, 200, 300];
+        $position = intval($this->attribute) - 1; // -1 -1 or +1 - 1
+
+        if (in_array($this->attribute[0], ['-', '+'])) {
+            $position = 3 + $position;
+        }
+
+        return sprintf(
+            '<span style="font-size: %s;">%s</span>',
+            isset($scale[$position]) ? $scale[$position] . '%' : 100,
+            $this->content
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function tagFont()
+    {
+        $this->validateAttribute();
+
+        return sprintf(
+            '<span style="font-family: %s;">%s</span>',
+            $this->attribute,
+            $this->content
+        );
+    }
+
+    /**
      * @throws MissingAttributeException
      */
     protected function validateAttribute()
