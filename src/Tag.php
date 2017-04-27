@@ -2,6 +2,7 @@
 
 namespace Galahad\Bbcode;
 
+use Galahad\Bbcode\Exception\MissingAttributeException;
 use Galahad\Bbcode\Exception\MissingTagException;
 
 /**
@@ -44,11 +45,23 @@ class Tag
      */
     public function tagColor()
     {
+        $this->validateAttribute();
+
         return sprintf(
             '<span style="color: %s;">%s</span>',
             $this->attribute,
             $this->content
         );
+    }
+
+    /**
+     * @throws MissingAttributeException
+     */
+    protected function validateAttribute()
+    {
+        if (empty(trim($this->attribute))) {
+            throw new MissingAttributeException();
+        }
     }
 
     /**
