@@ -2,6 +2,7 @@
 
 namespace Galahad\Bbcode\Tests;
 
+use Galahad\Bbcode\Exception\MissingAttributeException;
 use Galahad\Bbcode\Exception\MissingTagException;
 use Galahad\Bbcode\Parser;
 use PHPUnit\Framework\TestCase;
@@ -28,6 +29,10 @@ class ParserTest extends TestCase
                 $this->parser()->parse($text)
             );
         }
+
+        // Missing color attribute
+        $this->expectException(MissingAttributeException::class);
+        $this->parser()->parse('[color]text[/color]');
     }
 
     /**
@@ -47,6 +52,10 @@ class ParserTest extends TestCase
                 $this->parser()->parse("[size=$size]This is awesome[/size]")
             );
         }
+
+        // Missing size attribute
+        $this->expectException(MissingAttributeException::class);
+        $this->parser()->parse('[size]text[/size]');
     }
 
     /**
@@ -58,6 +67,10 @@ class ParserTest extends TestCase
             '<span style="font-family: Times New Roman;">Testing</span>',
             $this->parser()->parse('[font=Times New Roman]Testing[/font]')
         );
+
+        // Missing font attribute
+        $this->expectException(MissingAttributeException::class);
+        $this->parser()->parse('[font]text[/font]');
     }
 
     /**
