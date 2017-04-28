@@ -150,9 +150,19 @@ class ParserTest extends TestCase
     /**
      * @test
      */
-    public function parseThread()
+    public function parseList()
     {
-        // TODO
+        $list = <<<LIST
+[list]
+[*]list item 1
+[*]list item 2
+[/list]
+LIST;
+
+        $this->assertEquals(
+            '<ul><li>list item 1</li><li>list item 2</li></ul>',
+            $this->parser()->parse($list)
+        );
     }
 
     /**
