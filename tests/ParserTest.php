@@ -49,6 +49,17 @@ class ParserTest extends TestCase
     /**
      * @test
      */
+    public function parseFont()
+    {
+        $this->assertEquals(
+            '<span style="font-family: Times New Roman;">Testing</span>',
+            $this->parser()->parse('[font=Times New Roman]Testing[/font]')
+        );
+    }
+
+    /**
+     * @test
+     */
     public function missingTagException()
     {
         $this->expectException(MissingTagException::class);
