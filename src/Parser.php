@@ -13,27 +13,53 @@ use Illuminate\Support\Collection;
 class Parser
 {
     /**
-     * @var string
-     */
-    protected $pattern = '/\[([\w\d_-]+)[^\[]*\]/i';
-
-    /**
      * @param string $text
      * @return string
      */
     public function parse($text)
     {
-        preg_match_all(
-            $this->pattern, $text, $matches, PREG_SET_ORDER
-        );
+        $blocks = $this->parseBlocks($text);
 
-        foreach ($matches as $match) {
-            list($string, $name) = $match;
+        foreach ($blocks as $block) {
+            preg_match('/\[(.+)\]/', $block, $match);
+            list(, $name) = $match;
 
-            $tag = new Tag($string, $name);
-            $text = str_replace($string, $tag->render(), $text);
+            $tag = new Tag($name, $block);
+            $text = str_replace($block, $tag->render(), $text);
         }
 
         return $text;
+    }
+
+    /**
+     * @param string $text
+     * @return array
+     */
+    private function parseBlocks($text)
+    {
+        $blocks = [];
+        $block = '';
+        $collecting = false;
+        $closing = false;
+
+        for ($i = 0; $i < strlen($text); $i++) {
+            if ($text[$i] === '[' && !$collecting) {
+                $collecting = true;
+            }
+            if ($text[$i] === '/' && $text[$i - 1] === '[') {
+                $closing = true;
+            }
+            if ($collecting) {
+                $block .= $text[$i];
+            }
+            if ($text[$i] === ']' && $closing) {
+                $blocks[] = $block;
+                $block = '';
+                $collecting = false;
+                $closing = false;
+            }
+        }
+
+        return $blocks;
     }
 }
