@@ -91,6 +91,17 @@ class Tag
     }
 
     /**
+     * @return string
+     */
+    public function tagHighlight()
+    {
+        return sprintf(
+            '<mark>%s</mark>',
+            $this->content
+        );
+    }
+
+    /**
      * @throws MissingAttributeException
      */
     protected function validateAttribute()

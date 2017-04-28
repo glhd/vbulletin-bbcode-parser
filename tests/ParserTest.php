@@ -60,6 +60,17 @@ class ParserTest extends TestCase
     /**
      * @test
      */
+    public function parseHighlight()
+    {
+        $this->assertEquals(
+            'this is a <mark>test text</mark>',
+            $this->parser()->parse('this is a [highlight]test text[/highlight]')
+        );
+    }
+
+    /**
+     * @test
+     */
     public function missingTagException()
     {
         $this->expectException(MissingTagException::class);
