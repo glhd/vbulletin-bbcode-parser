@@ -150,6 +150,14 @@ class ParserTest extends TestCase
     /**
      * @test
      */
+    public function parseThread()
+    {
+        // TODO
+    }
+
+    /**
+     * @test
+     */
     public function missingTagException()
     {
         $this->expectException(MissingTagException::class);

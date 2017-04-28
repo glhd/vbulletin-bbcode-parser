@@ -174,6 +174,14 @@ class Tag
     }
 
     /**
+     * @return string
+     */
+    public function tagThread()
+    {
+
+    }
+
+    /**
      * @throws MissingAttributeException
      */
     protected function validateAttribute()
