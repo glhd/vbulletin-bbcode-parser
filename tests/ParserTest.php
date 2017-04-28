@@ -87,6 +87,17 @@ class ParserTest extends TestCase
     /**
      * @test
      */
+    public function parseIndent()
+    {
+        $this->assertEquals(
+            '<blockquote><div>this text is indented</div></blockquote>',
+            $this->parser()->parse('[indent]this text is indented[/indent]')
+        );
+    }
+
+    /**
+     * @test
+     */
     public function missingTagException()
     {
         $this->expectException(MissingTagException::class);

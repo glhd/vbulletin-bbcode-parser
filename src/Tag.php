@@ -105,7 +105,7 @@ class Tag
      * @param string $position
      * @return string
      */
-    public function renderTextAlignment($position = 'left')
+    protected function renderTextAlignment($position = 'left')
     {
         return sprintf(
             '<div style="text-align: %s;">%s</div>',
@@ -136,6 +136,17 @@ class Tag
     public function tagRight()
     {
         return $this->renderTextAlignment('right');
+    }
+
+    /**
+     * @return string
+     */
+    public function tagIndent()
+    {
+        return sprintf(
+            '<blockquote><div>%s</div></blockquote>',
+            $this->content
+        );
     }
 
     /**
