@@ -15,7 +15,7 @@ class Parser
     /**
      * @var string
      */
-    protected $pattern = '/\[(\w+)(="?([\w\s+-]+)"?)?\]([^\[]+)\[\/\w+\]/i';
+    protected $pattern = '/\[(\w+)(="?([\w\d\s\.@_+-]+)"?)?\]([^\[]+)\[\/\w+\]/i';
 
     /**
      * @param string $text

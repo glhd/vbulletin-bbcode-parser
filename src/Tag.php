@@ -150,6 +150,18 @@ class Tag
     }
 
     /**
+     * @return string
+     */
+    public function tagEmail()
+    {
+        return sprintf(
+            '<a href="mailto:%s">%s</a>',
+            $this->attribute ?: $this->content,
+            $this->content
+        );
+    }
+
+    /**
      * @throws MissingAttributeException
      */
     protected function validateAttribute()

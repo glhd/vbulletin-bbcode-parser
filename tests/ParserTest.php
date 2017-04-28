@@ -98,6 +98,22 @@ class ParserTest extends TestCase
     /**
      * @test
      */
+    public function parseEmail()
+    {
+        $this->assertEquals(
+            '<a href="mailto:foo@bar.com">foo@bar.com</a>',
+            $this->parser()->parse('[email]foo@bar.com[/email]')
+        );
+
+        $this->assertEquals(
+            '<a href="mailto:foo@bar.com">click me</a>',
+            $this->parser()->parse('[email=foo@bar.com]click me[/email]')
+        );
+    }
+
+    /**
+     * @test
+     */
     public function missingTagException()
     {
         $this->expectException(MissingTagException::class);
