@@ -19,12 +19,15 @@ class ParserTest extends TestCase
      */
     public function parseColor()
     {
-        $text = 'This is a [color=red]red color[/color] text.';
+        $colors = ['red', '#ff0000'];
 
-        $this->assertEquals(
-            'This is a <span style="color: red;">red color</span> text.',
-            $this->parser()->parse($text)
-        );
+        foreach ($colors as $color) {
+            $text = "this is a [color=$color]colored[/color] word";
+            $this->assertEquals(
+                "this is a <span style=\"color: $color;\">colored</span> word",
+                $this->parser()->parse($text)
+            );
+        }
     }
 
     /**
@@ -109,6 +112,26 @@ class ParserTest extends TestCase
             '<a href="mailto:foo@bar.com">click me</a>',
             $this->parser()->parse('[email=foo@bar.com]click me[/email]')
         );
+    }
+
+    /**
+     * @test
+     */
+    public function parseUrl()
+    {
+        $urls = ['http://foo.com', 'http://bar.com?foo=bar%20&foo#bar'];
+
+        foreach ($urls as $url) {
+            $this->assertEquals(
+                "<a href=\"$url\" target=\"_blank\">$url</a>",
+                $this->parser()->parse("[url]{$url}[/url]")
+            );
+
+            $this->assertEquals(
+                "<a href=\"$url\" target=\"_blank\">foo url</a>",
+                $this->parser()->parse("[url={$url}]foo url[/url]")
+            );
+        }
     }
 
     /**

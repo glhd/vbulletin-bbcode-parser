@@ -162,6 +162,18 @@ class Tag
     }
 
     /**
+     * @return string
+     */
+    public function tagUrl()
+    {
+        return sprintf(
+            '<a href="%s" target="_blank">%s</a>',
+            $this->attribute ?: $this->content,
+            $this->content
+        );
+    }
+
+    /**
      * @throws MissingAttributeException
      */
     protected function validateAttribute()
