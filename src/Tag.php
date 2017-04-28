@@ -62,8 +62,6 @@ class Tag
     {
         $this->validateAttribute();
 
-        // TODO 'small', 'x-large', etc
-
         $scale = [60, 89, 100, 120, 150, 200, 300];
         $position = intval($this->attribute) - 1; // -1 -1 or +1 - 1
 
@@ -73,7 +71,7 @@ class Tag
 
         return sprintf(
             '<span style="font-size: %s;">%s</span>',
-            isset($scale[$position]) ? $scale[$position] . '%' : 100,
+            isset($scale[$position]) ? $scale[$position] . '%' : $this->attribute,
             $this->content
         );
     }
