@@ -15,7 +15,7 @@ class Parser
     /**
      * @var string
      */
-    protected $pattern = '/\[(\w+)(="?([\w\d\s:\/%?#&=\.@_+-]+)"?)?\]([^\[]+)\[\/\w+\]/i';
+    protected $pattern = '/\[([\w\d_-]+)[^\[]*\]/i';
 
     /**
      * @param string $text
@@ -28,9 +28,9 @@ class Parser
         );
 
         foreach ($matches as $match) {
-            list($string, $name, , $attribute, $content) = $match;
+            list($string, $name) = $match;
 
-            $tag = new Tag($name, $content, $attribute);
+            $tag = new Tag($string, $name);
             $text = str_replace($string, $tag->render(), $text);
         }
 
