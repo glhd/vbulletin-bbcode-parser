@@ -4,6 +4,7 @@ namespace Galahad\Bbcode;
 
 use Galahad\Bbcode\Exception\MissingAttributeException;
 use Galahad\Bbcode\Exception\MissingTagException;
+use Galahad\Bbcode\Tags\BulletList;
 
 /**
  * Class Tag
@@ -19,6 +20,11 @@ class Tag
     protected $name;
 
     /**
+     * @var string
+     */
+    protected $block;
+
+    /**
      * @var mixed
      */
     protected $content;
@@ -29,15 +35,34 @@ class Tag
     protected $attribute;
 
     /**
-     * @param string $name
-     * @param mixed $content
-     * @param mixed|null $attribute
+     * @var string
      */
-    public function __construct($name, $content, $attribute = null)
+    protected $pattern = '/\[(\w+)(="?([\w\d\s:\/%?#&=\.@_+-]+)"?)?\]([^\[]+)\[\/\w+\]/i';
+
+    /**
+     * @param string $name
+     * @param string $block
+     */
+    public function __construct($name, $block)
     {
         $this->name = $name;
-        $this->content = $content;
-        $this->attribute = $attribute;
+        $this->block = $block;
+
+        $this->parse($block);
+    }
+
+    /**
+     * @param string $block
+     */
+    protected function parse($block)
+    {
+        preg_match($this->pattern, $block, $match);
+
+        if ($match) {
+            list(, , , $attribute, $content) = $match;
+            $this->content = $content;
+            $this->attribute = $attribute;
+        }
     }
 
     /**
@@ -178,7 +203,26 @@ class Tag
      */
     public function tagThread()
     {
+        // TODO
+    }
 
+    /**
+     * @return string
+     */
+    public function tagPost()
+    {
+        // TODO
+    }
+
+    /**
+     * @return string
+     */
+    public function tagList()
+    {
+        $renderer = new BulletList();
+        dd($this->block);
+
+        return $renderer->render($this->block);
     }
 
     /**

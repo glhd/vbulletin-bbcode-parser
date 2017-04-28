@@ -18,10 +18,10 @@ class Parser
      */
     public function parse($text)
     {
-        $blocks = $this->parseBlocks($text);
+        $blocks = $this->extractBlocks($text);
 
         foreach ($blocks as $block) {
-            preg_match('/\[(.+)\]/', $block, $match);
+            preg_match('/\[\/(.+)\]/i', $block, $match);
             list(, $name) = $match;
 
             $tag = new Tag($name, $block);
@@ -35,7 +35,7 @@ class Parser
      * @param string $text
      * @return array
      */
-    private function parseBlocks($text)
+    private function extractBlocks($text)
     {
         $blocks = [];
         $block = '';

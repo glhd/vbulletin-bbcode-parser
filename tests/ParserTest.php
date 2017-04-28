@@ -7,6 +7,8 @@ use Galahad\Bbcode\Exception\MissingTagException;
 use Galahad\Bbcode\Parser;
 use PHPUnit\Framework\TestCase;
 
+// TODO test number of blocks found in a text
+
 /**
  * Class ParserTest
  *
@@ -154,8 +156,8 @@ class ParserTest extends TestCase
     {
         $list = <<<LIST
 [list]
-[*]list item 1
-[*]list item 2
+[*] list item 1
+[*] list item 2
 [/list]
 LIST;
 
