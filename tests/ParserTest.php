@@ -71,6 +71,22 @@ class ParserTest extends TestCase
     /**
      * @test
      */
+    public function parseTextAlignment()
+    {
+        $text = 'just a test text';
+        $positions = ['left', 'center', 'right'];
+
+        foreach ($positions as $position) {
+            $this->assertEquals(
+                "<div style=\"text-align: $position;\">$text</div>",
+                $this->parser()->parse("[{$position}]{$text}[/{$position}]")
+            );
+        }
+    }
+
+    /**
+     * @test
+     */
     public function missingTagException()
     {
         $this->expectException(MissingTagException::class);

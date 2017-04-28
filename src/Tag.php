@@ -102,6 +102,43 @@ class Tag
     }
 
     /**
+     * @param string $position
+     * @return string
+     */
+    public function renderTextAlignment($position = 'left')
+    {
+        return sprintf(
+            '<div style="text-align: %s;">%s</div>',
+            $position,
+            $this->content
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function tagLeft()
+    {
+        return $this->renderTextAlignment('left');
+    }
+
+    /**
+     * @return string
+     */
+    public function tagCenter()
+    {
+        return $this->renderTextAlignment('center');
+    }
+
+    /**
+     * @return string
+     */
+    public function tagRight()
+    {
+        return $this->renderTextAlignment('right');
+    }
+
+    /**
      * @throws MissingAttributeException
      */
     protected function validateAttribute()
