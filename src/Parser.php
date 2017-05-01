@@ -2,6 +2,7 @@
 
 namespace Galahad\Bbcode;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 /**
@@ -20,10 +21,7 @@ class Parser
     {
         $blocks = $this->extractBlocks($text);
 
-        foreach ($blocks as $block) {
-            preg_match('/\[\/(.+)\]/i', $block, $match);
-            list(, $name) = $match;
-
+        foreach ($blocks as $name => $block) {
             $tag = new Tag($name, $block);
             $text = str_replace($block, $tag->render(), $text);
         }
@@ -37,29 +35,12 @@ class Parser
      */
     private function extractBlocks($text)
     {
-        $blocks = [];
-        $block = '';
-        $collecting = false;
-        $closing = false;
+        $pattern = '/\[[^\]]+\][^\/]+\[\/([\w\d]+)\]/i';
+        preg_match_all($pattern, $text, $matches);
 
-        for ($i = 0; $i < strlen($text); $i++) {
-            if ($text[$i] === '[' && !$collecting) {
-                $collecting = true;
-            }
-            if ($text[$i] === '/' && $text[$i - 1] === '[') {
-                $closing = true;
-            }
-            if ($collecting) {
-                $block .= $text[$i];
-            }
-            if ($text[$i] === ']' && $closing) {
-                $blocks[] = $block;
-                $block = '';
-                $collecting = false;
-                $closing = false;
-            }
-        }
+        $keys = Arr::get($matches, 1);
+        $values = Arr::get($matches, 0);
 
-        return $blocks;
+        return array_combine($keys, $values);
     }
 }
