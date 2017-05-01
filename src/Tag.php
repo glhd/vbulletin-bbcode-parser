@@ -228,7 +228,7 @@ class Tag
         $method = 'tag'.ucfirst($this->name);
 
         if (method_exists($this, $method)) {
-            $this->extract($text);
+            $this->split($text);
             $html = $this->$method($text);
 
             return str_replace($this->block, $html, $text);
@@ -241,7 +241,7 @@ class Tag
      * @param string $string
      * @return array
      */
-    protected function extractAttributes($string)
+    protected function splitAttributes($string)
     {
         $pattern = '/([\w\d]+)=("([^ ]+)"|[^"\]]+)/i';
         preg_match_all($pattern, $string, $matches, PREG_SET_ORDER);
@@ -257,18 +257,16 @@ class Tag
 
     /**
      * @param string $text
-     * @return array
      * @internal param string $tag
      */
-    private function extract($text)
+    protected function split($text)
     {
-        $pattern = sprintf(
-            '/\[(%s.*?)\](.+?)\[\/%s\]/is', $this->name, $this->name
-        );
+        $pattern = '/\[(%s.*?)\](.+?)\[\/%s\]/is';
+        $pattern = sprintf($pattern, $this->name, $this->name);
 
         preg_match($pattern, $text, $match);
 
         list($this->block, $attributes, $this->content) = $match;
-        $this->attributes = $this->extractAttributes($attributes);
+        $this->attributes = $this->splitAttributes($attributes);
     }
 }

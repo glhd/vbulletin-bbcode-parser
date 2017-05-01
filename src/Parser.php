@@ -19,9 +19,9 @@ class Parser
      */
     public function parse($text)
     {
-        $blocks = $this->extractTags($text);
+        $tags = $this->extractTags($text);
 
-        foreach ($blocks as $name) {
+        foreach ($tags as $name) {
             $tag = new Tag($name);
             $text = $tag->render($text);
         }
