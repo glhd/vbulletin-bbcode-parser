@@ -147,6 +147,11 @@ class ParserTest extends TestCase
                 $this->parser()->parse("[url={$url}]foo url[/url]")
             );
         }
+
+        $this->assertEquals(
+            '<a href="http://foo.bar" target="_blank">foo.bar</a>',
+            $this->parser()->parse('[url="http://foo.bar"]foo.bar[/url]')
+        );
     }
 
     /**
@@ -154,12 +159,12 @@ class ParserTest extends TestCase
      */
     public function parseList()
     {
-        $list = <<<LIST
-[list]
+        $list =<<<TEXT
+[list] 
 [*] list item 1
 [*] list item 2
 [/list]
-LIST;
+TEXT;
 
         $this->assertEquals(
             '<ul><li>list item 1</li><li>list item 2</li></ul>',
