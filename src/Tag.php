@@ -52,7 +52,7 @@ class Tag
      */
     protected function parse($block)
     {
-        $pattern = '/\[([^\]]+)\]([^\/]+)\[\/[\w\d]+]/i';
+        $pattern = '/\[([^\]]+)\](.+?)\[\/[\w\d]+]/is';
         preg_match($pattern, $block, $match);
 
         list(, $attributes, $content) = $match;
@@ -231,7 +231,7 @@ class Tag
      */
     protected function validateAttribute()
     {
-        if (empty(trim($this->attribute))) {
+        if (empty(trim(Arr::first($this->attributes)))) {
             throw new MissingAttributeException();
         }
     }
