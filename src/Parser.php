@@ -35,7 +35,7 @@ class Parser
      */
     private function extractBlocks($text)
     {
-        $pattern = '/\[[^\]]+\][^\/]+\[\/([\w\d]+)\]/i';
+        $pattern = '/\[[^\]]+\].+?\[\/([\w\d]+)\]/is';
         preg_match_all($pattern, $text, $matches);
 
         $keys = Arr::get($matches, 1);
