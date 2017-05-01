@@ -37,28 +37,10 @@ class Tag
 
     /**
      * @param string $name
-     * @param string $block
      */
-    public function __construct($name, $block)
+    public function __construct($name)
     {
         $this->name = $name;
-        $this->block = $block;
-
-        $this->parse($block);
-    }
-
-    /**
-     * @param string $block
-     */
-    protected function parse($block)
-    {
-        $pattern = '/\[([^\]]+)\](.+?)\[\/[\w\d]+]/is';
-        preg_match($pattern, $block, $match);
-
-        list(, $attributes, $content) = $match;
-
-        $this->attributes = $this->extractAttributes($attributes);
-        $this->content = $content;
     }
 
     /**
@@ -216,13 +198,14 @@ class Tag
     }
 
     /**
+     * @param $text
      * @return string
      */
-    public function tagList()
+    public function tagList($text)
     {
         $renderer = new BulletList();
 
-        return $renderer->render($this->block);
+        return $renderer->render($text);
     }
 
     /**
@@ -236,15 +219,19 @@ class Tag
     }
 
     /**
+     * @param string $text
      * @return string
-     * @throws \Exception
+     * @throws MissingTagException
      */
-    public function render()
+    public function render($text)
     {
         $method = 'tag'.ucfirst($this->name);
 
         if (method_exists($this, $method)) {
-            return $this->$method();
+            $this->extract($text);
+            $html = $this->$method($text);
+
+            return str_replace($this->block, $html, $text);
         }
 
         throw new MissingTagException("Missing parser for $this->name tag");
@@ -266,5 +253,22 @@ class Tag
         }
 
         return $attributes;
+    }
+
+    /**
+     * @param string $text
+     * @return array
+     * @internal param string $tag
+     */
+    private function extract($text)
+    {
+        $pattern = sprintf(
+            '/\[(%s.*?)\](.+?)\[\/%s\]/is', $this->name, $this->name
+        );
+
+        preg_match($pattern, $text, $match);
+
+        list($this->block, $attributes, $this->content) = $match;
+        $this->attributes = $this->extractAttributes($attributes);
     }
 }

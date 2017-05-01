@@ -22,8 +22,8 @@ class Parser
         $blocks = $this->extractTags($text);
 
         foreach ($blocks as $name) {
-            $tag = new Tag($name, $text);
-            $text = $tag->render();
+            $tag = new Tag($name);
+            $text = $tag->render($text);
         }
 
         return $text;
