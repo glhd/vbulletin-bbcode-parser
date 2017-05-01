@@ -221,7 +221,6 @@ class Tag
     public function tagList()
     {
         $renderer = new BulletList();
-        dd($this->block);
 
         return $renderer->render($this->block);
     }
