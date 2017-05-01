@@ -5,6 +5,7 @@ namespace Galahad\Bbcode;
 use Galahad\Bbcode\Exception\MissingAttributeException;
 use Galahad\Bbcode\Exception\MissingTagException;
 use Galahad\Bbcode\Tags\BulletList;
+use Illuminate\Support\Arr;
 
 /**
  * Class Tag
@@ -30,14 +31,9 @@ class Tag
     protected $content;
 
     /**
-     * @var mixed
+     * @var array
      */
-    protected $attribute;
-
-    /**
-     * @var string
-     */
-    protected $pattern = '/\[(\w+)(="?([\w\d\s:\/%?#&=\.@_+-]+)"?)?\]([^\[]+)\[\/\w+\]/i';
+    protected $attributes;
 
     /**
      * @param string $name
@@ -56,13 +52,13 @@ class Tag
      */
     protected function parse($block)
     {
-        preg_match($this->pattern, $block, $match);
+        $pattern = '/\[([^\]]+)\]([^\/]+)\[\/[\w\d]+]/i';
+        preg_match($pattern, $block, $match);
 
-        if ($match) {
-            list(, , , $attribute, $content) = $match;
-            $this->content = $content;
-            $this->attribute = $attribute;
-        }
+        list(, $attributes, $content) = $match;
+
+        $this->attributes = $this->extractAttributes($attributes);
+        $this->content = $content;
     }
 
     /**
@@ -74,7 +70,7 @@ class Tag
 
         return sprintf(
             '<span style="color: %s;">%s</span>',
-            $this->attribute,
+            Arr::first($this->attributes),
             $this->content
         );
     }
@@ -87,16 +83,17 @@ class Tag
     {
         $this->validateAttribute();
 
+        $attribute = Arr::first($this->attributes);
         $scale = [60, 89, 100, 120, 150, 200, 300];
-        $position = intval($this->attribute) - 1; // -1 -1 or +1 - 1
+        $position = intval($attribute) - 1; // -1 -1 or +1 - 1
 
-        if (in_array($this->attribute[0], ['-', '+'])) {
+        if (in_array($attribute[0], ['-', '+'])) {
             $position = 3 + $position;
         }
 
         return sprintf(
             '<span style="font-size: %s;">%s</span>',
-            isset($scale[$position]) ? $scale[$position] . '%' : $this->attribute,
+            isset($scale[$position]) ? $scale[$position] . '%' : $attribute,
             $this->content
         );
     }
@@ -110,7 +107,7 @@ class Tag
 
         return sprintf(
             '<span style="font-family: %s;">%s</span>',
-            $this->attribute,
+            Arr::first($this->attributes),
             $this->content
         );
     }
@@ -179,9 +176,11 @@ class Tag
      */
     public function tagEmail()
     {
+        $attribute = Arr::first($this->attributes);
+
         return sprintf(
             '<a href="mailto:%s">%s</a>',
-            $this->attribute ?: $this->content,
+            $attribute ?: $this->content,
             $this->content
         );
     }
@@ -191,9 +190,11 @@ class Tag
      */
     public function tagUrl()
     {
+        $attribute = Arr::first($this->attributes);
+
         return sprintf(
             '<a href="%s" target="_blank">%s</a>',
-            $this->attribute ?: $this->content,
+            $attribute ?: $this->content,
             $this->content
         );
     }
@@ -248,5 +249,23 @@ class Tag
         }
 
         throw new MissingTagException("Missing parser for $this->name tag");
+    }
+
+    /**
+     * @param string $string
+     * @return array
+     */
+    protected function extractAttributes($string)
+    {
+        $pattern = '/([\w\d]+)=("([^ ]+)"|[^"\]]+)/i';
+        preg_match_all($pattern, $string, $matches, PREG_SET_ORDER);
+        $attributes = [];
+
+        foreach ($matches as $match) {
+            $key = Arr::get($match, 1);
+            $attributes[$key] = Arr::last($match);
+        }
+
+        return $attributes;
     }
 }
