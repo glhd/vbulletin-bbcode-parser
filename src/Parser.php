@@ -19,11 +19,11 @@ class Parser
      */
     public function parse($text)
     {
-        $blocks = $this->extractBlocks($text);
+        $blocks = $this->extractTags($text);
 
-        foreach ($blocks as $name => $block) {
-            $tag = new Tag($name, $block);
-            $text = str_replace($block, $tag->render(), $text);
+        foreach ($blocks as $name) {
+            $tag = new Tag($name, $text);
+            $text = $tag->render();
         }
 
         return $text;
@@ -33,14 +33,13 @@ class Parser
      * @param string $text
      * @return array
      */
-    private function extractBlocks($text)
+    private function extractTags($text)
     {
-        $pattern = '/\[[^\]]+\].+?\[\/([\w\d]+)\]/is';
+        $pattern = '/\[\/([\w\d]+)\]/i';
         preg_match_all($pattern, $text, $matches);
 
-        $keys = Arr::get($matches, 1);
-        $values = Arr::get($matches, 0);
+        $tags = Arr::get($matches, 1);
 
-        return array_combine($keys, $values);
+        return array_map('strtolower', $tags);
     }
 }
