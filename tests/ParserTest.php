@@ -157,7 +157,7 @@ class ParserTest extends TestCase
     /**
      * @test
      */
-    public function parseList()
+    public function parseBulletList()
     {
         $list =<<<TEXT
 [list] 
@@ -170,6 +170,23 @@ TEXT;
             '<ul><li>list item 1</li><li>list item 2</li></ul>',
             $this->parser()->parse($list)
         );
+    }
+
+    /**
+     * @test
+     */
+    public function parseAdvancedList()
+    {
+        $input = <<<INPUT
+[list=1]
+[*]list item 1
+[*]list item 2
+[/list]
+INPUT;
+
+        $output = '<ol type="1"><li>list item 1</li><li>list item 2</li></ol>';
+
+        $this->assertEquals($output, $this->parser()->parse($input));
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Galahad\Bbcode;
 
 use Galahad\Bbcode\Exception\MissingAttributeException;
 use Galahad\Bbcode\Exception\MissingTagException;
+use Galahad\Bbcode\Tags\AdvancedList;
 use Galahad\Bbcode\Tags\BulletList;
 use Illuminate\Support\Arr;
 
@@ -12,6 +13,7 @@ use Illuminate\Support\Arr;
  *
  * @package Galahad\Bbcode
  * @author Junior Grossi <juniorgro@gmail.com>
+ * @see http://www.vbulletin.org/forum/misc.php?do=bbcode
  */
 class Tag
 {
@@ -198,12 +200,16 @@ class Tag
     }
 
     /**
-     * @param $text
+     * @param string $text
      * @return string
      */
     public function tagList($text)
     {
-        $renderer = new BulletList();
+        if ($attribute = Arr::first($this->attributes)) {
+            $renderer = new AdvancedList($attribute);
+        } else {
+            $renderer = new BulletList();
+        }
 
         return $renderer->render($text);
     }
