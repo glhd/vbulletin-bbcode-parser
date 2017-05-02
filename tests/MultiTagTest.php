@@ -87,6 +87,20 @@ OUTPUT;
 
         $this->assertEquals($output, $this->parser()->parse($input));
     }
+
+    /**
+     * @test
+     */
+    public function imgTagInsideAnchor()
+    {
+        $input = <<<INPUT
+[url=http://www.example.com] [img]http://www.example.org/forum/image.gif[/img] [/url]
+INPUT;
+
+        $output = '<a href="http://www.example.com" target="_blank"> <img class="" src="http://www.example.org/forum/image.gif"/> </a>';
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
     
     /**
      * @return Parser
