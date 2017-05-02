@@ -270,6 +270,28 @@ OUTPUT;
     /**
      * @test
      */
+    public function parseHtml()
+    {
+        $input = <<<INPUT
+[html]
+<img src="image.gif" alt="image" />
+<a href="testing.html" target="_blank">Testing</a>
+[/html]
+INPUT;
+
+        $output = <<<OUTPUT
+<code><pre>
+<img src="image.gif" alt="image" />
+<a href="testing.html" target="_blank">Testing</a>
+</pre></code>
+OUTPUT;
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function missingTagException()
     {
         $this->expectException(MissingTagException::class);
