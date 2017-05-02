@@ -35,7 +35,7 @@ class Parser
      */
     private function extractTags($text)
     {
-        $pattern = '/\[\/([\w\d]+)\]/i';
+        $pattern = '/\[([a-z0-9]+).*?\]/i';
         preg_match_all($pattern, $text, $matches);
 
         $tags = Arr::get($matches, 1);
