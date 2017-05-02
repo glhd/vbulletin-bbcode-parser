@@ -242,6 +242,34 @@ OUTPUT;
     /**
      * @test
      */
+    public function parsePhp()
+    {
+        $input = <<<'INPUT'
+[php]
+$myvar = 'Hello World!';
+for ($i = 0; $i < 10; $i++)
+{
+    echo $myvar . "\n";
+}
+[/php]
+INPUT;
+
+        $output = <<<'OUTPUT'
+<code><pre>
+$myvar = 'Hello World!';
+for ($i = 0; $i < 10; $i++)
+{
+    echo $myvar . "\n";
+}
+</pre></code>
+OUTPUT;
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function missingTagException()
     {
         $this->expectException(MissingTagException::class);

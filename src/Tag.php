@@ -238,6 +238,15 @@ class Tag
 
     /**
      * @return string
+     * @todo Syntax highlighting
+     */
+    public function tagPhp()
+    {
+        return $this->tagCode();
+    }
+
+    /**
+     * @return string
      */
     public function tagB()
     {
