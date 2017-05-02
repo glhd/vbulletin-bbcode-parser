@@ -214,6 +214,34 @@ INPUT;
     /**
      * @test
      */
+    public function parseCode()
+    {
+        $input = <<<INPUT
+[code]
+<script type="text/javascript">
+<!--
+    alert("Hello world!");
+//-->
+</script>
+[/code]
+INPUT;
+
+        $output = <<<OUTPUT
+<code><pre>
+<script type="text/javascript">
+<!--
+    alert("Hello world!");
+//-->
+</script>
+</pre></code>
+OUTPUT;
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function missingTagException()
     {
         $this->expectException(MissingTagException::class);

@@ -228,6 +228,17 @@ class Tag
     /**
      * @return string
      */
+    public function tagCode()
+    {
+        return sprintf(
+            '<code><pre>%s</pre></code>',
+            $this->content
+        );
+    }
+
+    /**
+     * @return string
+     */
     public function tagB()
     {
         return sprintf(
