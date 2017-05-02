@@ -209,6 +209,17 @@ class Tag
     }
 
     /**
+     * @return string
+     */
+    public function tagB()
+    {
+        return sprintf(
+            '<strong>%s</strong>',
+            $this->content
+        );
+    }
+
+    /**
      * @throws MissingAttributeException
      */
     protected function validateAttribute()
@@ -228,10 +239,13 @@ class Tag
         $method = 'tag'.ucfirst($this->name);
 
         if (method_exists($this, $method)) {
-            $this->split($text);
-            $html = $this->$method($text);
+            if ($this->split($text)) {
+                return str_replace(
+                    $this->block, $this->$method($text), $text
+                );
+            }
 
-            return str_replace($this->block, $html, $text);
+            return $text;
         }
 
         throw new MissingTagException("Missing parser for $this->name tag");
@@ -249,7 +263,7 @@ class Tag
 
         foreach ($matches as $match) {
             $key = Arr::get($match, 1);
-            $attributes[$key] = Arr::last($match);
+            $attributes[strtolower($key)] = Arr::last($match);
         }
 
         return $attributes;
@@ -258,15 +272,21 @@ class Tag
     /**
      * @param string $text
      * @internal param string $tag
+     * @return bool
      */
     protected function split($text)
     {
-        $pattern = '/\[(%s.*?)\](.+?)\[\/%s\]/is';
+        $pattern = '/\[(%s[^\]]*)\](.*?)\[\/%s\]/is';
         $pattern = sprintf($pattern, $this->name, $this->name);
 
         preg_match($pattern, $text, $match);
 
-        list($this->block, $attributes, $this->content) = $match;
+        $this->block = Arr::get($match, 0, '');
+        $attributes = Arr::get($match, 1, '');
+        $this->content = Arr::get($match, 2, '');
+
         $this->attributes = $this->splitAttributes($attributes);
+
+        return (bool)$this->block;
     }
 }
