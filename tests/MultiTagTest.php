@@ -69,6 +69,26 @@ OUTPUT;
     }
 
     /**
+     * @test
+     */
+    public function realCaseFontWithCaseAndSizeTags()
+    {
+        $input = <<<INPUT
+[FONT=Comic Sans MS][SIZE=3][COLOR=red]Wow big changes to learn.[/COLOR][/SIZE][/FONT]
+[FONT=Comic Sans MS][SIZE=3][COLOR=red][/COLOR][/SIZE][/FONT] 
+[SIZE=3][COLOR=red][FONT=Comic Sans MS]Anyway it looks good lets get some electrical questions in here[/FONT].[/COLOR][/SIZE]  :)
+INPUT;
+
+        $output = <<<OUTPUT
+<span style="font-family: Comic Sans MS;"><span style="font-size: 100%;"><span style="color: red;">Wow big changes to learn.</span></span></span>
+<span style="font-family: Comic Sans MS;"><span style="font-size: 100%;"><span style="color: red;"></span></span></span> 
+<span style="font-size: 100%;"><span style="color: red;"><span style="font-family: Comic Sans MS;">Anyway it looks good lets get some electrical questions in here</span>.</span></span>  :)
+OUTPUT;
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+    
+    /**
      * @return Parser
      */
     private function parser()
