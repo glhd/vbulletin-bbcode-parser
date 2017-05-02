@@ -217,6 +217,17 @@ class Tag
     /**
      * @return string
      */
+    public function tagImg()
+    {
+        return sprintf(
+            '<img class="" src="%s"/>',
+            $this->content
+        );
+    }
+
+    /**
+     * @return string
+     */
     public function tagB()
     {
         return sprintf(

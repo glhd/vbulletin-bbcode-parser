@@ -203,6 +203,17 @@ INPUT;
     /**
      * @test
      */
+    public function parseImg()
+    {
+        $input = '[img]http://example.com/assets/image.gif[/img]';
+        $output = '<img class="" src="http://example.com/assets/image.gif"/>';
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function missingTagException()
     {
         $this->expectException(MissingTagException::class);
