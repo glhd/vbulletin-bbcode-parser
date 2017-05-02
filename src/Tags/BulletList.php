@@ -15,7 +15,12 @@ class BulletList implements TagInterface
     /**
      * @var string
      */
-    protected $pattern = '/(?:\[\*\]\s+(.*))+/i';
+    protected $pattern = '/(?:\[\*\]\s*(.*))+/i';
+
+    /**
+     * @var string
+     */
+    protected $html = '<ul><li>%s</li></ul>';
 
     /**
      * @param string $text
@@ -27,6 +32,6 @@ class BulletList implements TagInterface
         $items = Arr::get($matches, 1);
         $items = implode('</li><li>', $items);
 
-        return sprintf('<ul><li>%s</li></ul>', $items);
+        return sprintf($this->html, $items);
     }
 }
