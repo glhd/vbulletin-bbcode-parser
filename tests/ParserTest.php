@@ -292,6 +292,17 @@ OUTPUT;
     /**
      * @test
      */
+    public function parseQuote()
+    {
+        $input = '[quote]Lorem ipsum dolor sit amet[/quote]';
+        $output = '<blockquote><p>Lorem ipsum dolor sit amet</p></blockquote>';
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function missingTagException()
     {
         $this->expectException(MissingTagException::class);

@@ -257,6 +257,17 @@ class Tag
     /**
      * @return string
      */
+    public function tagQuote()
+    {
+        return sprintf(
+            '<blockquote><p>%s</p></blockquote>',
+            $this->content
+        );
+    }
+
+    /**
+     * @return string
+     */
     public function tagB()
     {
         return sprintf(
