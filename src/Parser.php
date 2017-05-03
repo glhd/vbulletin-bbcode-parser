@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
  */
 class Parser
 {
-    const STATE_STARTED = 0;
+    const STATE_STOP = 0;
     const STATE_OPEN = 1;
     const STATE_PARAMETER = 2;
     const STATE_CONTENT = 3;
@@ -25,12 +25,12 @@ class Parser
      */
     public function parse($text)
     {
-        $state = static::STATE_STARTED;
-        $block = $newText = $openTag = $closeTag = $content = '';
+        $state = static::STATE_STOP;
+        $block = $newText = $openTag = $closeTag = '';
 
         for ($i = 0; $i < strlen($text); $i++) {
             $char = $text[$i];
-            if ($char == '[' && $state == static::STATE_STARTED) {
+            if ($char == '[' && $state == static::STATE_STOP) {
                 $state = static::STATE_OPEN;
             }
             if (in_array($char, ['=', ' ']) && $state == static::STATE_OPEN) {
@@ -48,25 +48,23 @@ class Parser
                     $closeTag .= $char;
                 }
             }
-            if ($state != static::STATE_STARTED) {
+            if ($state != static::STATE_STOP) {
                 $block .= $char;
             } else {
                 $newText .= $char;
             }
-            if ($char == '[' && $text[$i + 1] == '/') {
+            if ($char == '[' && isset($text[$i + 1]) && $text[$i + 1] == '/') {
                 $state = static::STATE_CLOSE;
             }
             if ($char == ']' && $state == static::STATE_CLOSE) {
                 if ($openTag === $closeTag) {
-                    $state = static::STATE_STARTED;
-                    $newText = $this->replaceText($openTag, $block, $newText);
-                    $block = $openTag = $closeTag = $content = '';
+                    $state = static::STATE_STOP;
+                    $newText .= $this->replaceText($openTag, $block);
+                    $block = $openTag = $closeTag = '';
                 } else {
                     $state = static::STATE_CONTENT;
                     $closeTag = '';
                 }
-            } elseif ($state === static::STATE_CONTENT) {
-                $content .= $char;
             }
         }
 
@@ -74,20 +72,19 @@ class Parser
     }
 
     /**
-     * @param $tagName
-     * @param $block
-     * @param $newText
+     * @param string $tagName
+     * @param string $block
      * @return string
      */
-    protected function replaceText($tagName, $block, $newText)
+    protected function replaceText($tagName, $block)
     {
         $tag = new Tag($tagName);
-        $html = $tag->render($block);
+        $text = $tag->render($block);
 
         if ($tag->shouldRender()) {
-            $html = $this->parse($html);
+            return $this->parse($text);
         }
 
-        return $newText.$html;
+        return $text;
     }
 }
