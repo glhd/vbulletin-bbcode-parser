@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
  * @package Galahad\Bbcode
  * @author Junior Grossi <juniorgro@gmail.com>
  */
-class Bbcode
+class Parser
 {
     const STATE_STOP = 0;
     const STATE_OPEN = 1;
@@ -59,7 +59,7 @@ class Bbcode
             if ($char == ']' && $state == static::STATE_CLOSE) {
                 if ($openTag === $closeTag) {
                     $state = static::STATE_STOP;
-                    $newText .= $this->replaceText($openTag, $block);
+                    $newText .= $this->parseBlock($openTag, $block);
                     $block = $openTag = $closeTag = '';
                 } else {
                     $state = static::STATE_CONTENT;
@@ -76,7 +76,7 @@ class Bbcode
      * @param string $block
      * @return string
      */
-    protected function replaceText($tagName, $block)
+    protected function parseBlock($tagName, $block)
     {
         $tag = new Tag($tagName);
         $text = $tag->render($block);

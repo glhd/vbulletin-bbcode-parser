@@ -4,7 +4,7 @@ namespace Galahad\Bbcode\Tests;
 
 use Galahad\Bbcode\Exception\MissingAttributeException;
 use Galahad\Bbcode\Exception\MissingTagException;
-use Galahad\Bbcode\Bbcode;
+use Galahad\Bbcode\Parser;
 use PHPUnit\Framework\TestCase;
 
 // TODO test number of blocks found in a text
@@ -333,15 +333,15 @@ OUTPUT;
     {
         $this->expectException(MissingTagException::class);
 
-        $parser = new Bbcode();
+        $parser = new Parser();
         $parser->parse('Text [fake]to fail[/fake]');
     }
 
     /**
-     * @return Bbcode
+     * @return Parser
      */
     private function parser()
     {
-        return new Bbcode();
+        return new Parser();
     }
 }
