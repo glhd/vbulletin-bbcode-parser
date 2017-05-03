@@ -2,7 +2,7 @@
 
 namespace Galahad\Bbcode\Tests;
 
-use Galahad\Bbcode\Parser;
+use Galahad\Bbcode\Bbcode;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -105,10 +105,10 @@ OUTPUT;
     }
     
     /**
-     * @return Parser
+     * @return Bbcode
      */
     private function parser()
     {
-        return new Parser();
+        return new Bbcode();
     }
 }

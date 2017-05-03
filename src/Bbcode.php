@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
  * @package Galahad\Bbcode
  * @author Junior Grossi <juniorgro@gmail.com>
  */
-class Parser
+class Bbcode
 {
     const STATE_STOP = 0;
     const STATE_OPEN = 1;
