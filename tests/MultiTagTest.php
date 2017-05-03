@@ -103,6 +103,27 @@ OUTPUT;
 
         $this->assertEquals($output, $this->parser()->parse($input));
     }
+
+    /**
+     * @test
+     */
+    public function noParseTagWithOthers()
+    {
+        $input = <<<INPUT
+[noparse]
+[b][font=Arial]Lorem ipsum dolor sit amet[/font][/b]
+[/noparse] foo [b]something[/b] bar 
+[b]Lorem ipsum dolor sit amet[/b]
+INPUT;
+
+        $output = <<<OUTPUT
+\n[b][font=Arial]Lorem ipsum dolor sit amet[/font][/b]
+ foo <strong>something</strong> bar 
+<strong>Lorem ipsum dolor sit amet</strong>
+OUTPUT;
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
     
     /**
      * @return Bbcode

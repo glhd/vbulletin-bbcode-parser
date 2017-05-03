@@ -320,8 +320,8 @@ OUTPUT;
      */
     public function parseNoparse()
     {
-        $input = '[noparse][b]Lorem ipsum dolor sit amet[/b][/noparse] foo [b]something[/b] bar [b]Lorem ipsum dolor sit amet[/b]';
-        $output = '[b]Lorem ipsum dolor sit amet[/b] foo <strong>something</strong> bar <strong>Lorem ipsum dolor sit amet</strong>';
+        $input = '[noparse][b]Lorem ipsum dolor sit amet[/b][/noparse]';
+        $output = '[b]Lorem ipsum dolor sit amet[/b]';
 
         $this->assertEquals($output, $this->parser()->parse($input));
     }
