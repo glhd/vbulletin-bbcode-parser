@@ -295,7 +295,22 @@ OUTPUT;
     public function parseQuote()
     {
         $input = '[quote]Lorem ipsum dolor sit amet[/quote]';
-        $output = '<blockquote><p>Lorem ipsum dolor sit amet</p></blockquote>';
+        $output = <<<OUTPUT
+<blockquote>
+    <p>Lorem ipsum dolor sit amet</p>
+    <footer></footer>
+</blockquote>
+OUTPUT;
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+
+        $input = '[quote=John Doe]Lorem ipsum dolor sit amet[/quote]';
+        $output = <<<OUTPUT
+<blockquote>
+    <p>Lorem ipsum dolor sit amet</p>
+    <footer>John Doe</footer>
+</blockquote>
+OUTPUT;
 
         $this->assertEquals($output, $this->parser()->parse($input));
     }

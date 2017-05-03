@@ -259,9 +259,17 @@ class Tag
      */
     public function tagQuote()
     {
+        $html = <<<HTML
+<blockquote>
+    <p>%s</p>
+    <footer>%s</footer>
+</blockquote>
+HTML;
+
         return sprintf(
-            '<blockquote><p>%s</p></blockquote>',
-            $this->content
+            $html,
+            $this->content,
+            Arr::get($this->attributes, 'quote') ?: ''
         );
     }
 
