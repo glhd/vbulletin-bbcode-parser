@@ -26,17 +26,17 @@ class Parser
     public function parse($text)
     {
         $state = static::STATE_STARTED;
-        $block = $newText = $openTag = $closeTag = '';
+        $block = $newText = $openTag = $closeTag = $content = '';
 
         for ($i = 0; $i < strlen($text); $i++) {
             $char = $text[$i];
             if ($char == '[' && $state == static::STATE_STARTED) {
                 $state = static::STATE_OPEN;
             }
-            if ($char == '=' || $char == ' ' && $state == static::STATE_OPEN) {
+            if (in_array($char, ['=', ' ']) && $state == static::STATE_OPEN) {
                 $state = static::STATE_PARAMETER;
             }
-            if ($char == ']' && in_array($state, [static::STATE_OPEN, static::STATE_PARAMETER])) {
+            if (in_array($state, [static::STATE_OPEN, static::STATE_PARAMETER]) && $text[$i - 1] == ']') {
                 $state = static::STATE_CONTENT;
             }
             if (preg_match('/[a-z0-9]/i', $char)) {
@@ -51,7 +51,7 @@ class Parser
             } else {
                 $newText .= $char;
             }
-            if ($char == '/' && $text[$i - 1] == '[') {
+            if ($char == '[' && $text[$i + 1] == '/') {
                 $state = static::STATE_CLOSE;
             }
             if ($char == ']' && $state == static::STATE_CLOSE) {
@@ -59,13 +59,17 @@ class Parser
                     $state = static::STATE_STARTED;
 
                     $tag = new Tag($openTag);
-                    $newText .= $tag->render($block);
+                    $html = $tag->render($block);
 
-                    $block = $openTag = $closeTag = '';
+                    $newText .= $html;
+
+                    $block = $openTag = $closeTag = $content = '';
                 } else {
                     $state = static::STATE_CONTENT;
                     $closeTag = '';
                 }
+            } elseif ($state === static::STATE_CONTENT) {
+                $content .= $char;
             }
         }
 
