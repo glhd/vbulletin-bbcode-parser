@@ -13,33 +13,62 @@ use Illuminate\Support\Collection;
  */
 class Parser
 {
+    const STATE_STARTED = 0;
+    const STATE_OPEN = 1;
+    const STATE_PARAMETER = 2;
+    const STATE_CONTENT = 3;
+    const STATE_CLOSE = 4;
+
     /**
      * @param string $text
      * @return string
      */
     public function parse($text)
     {
-        $tags = $this->extractTags($text);
+        $state = static::STATE_STARTED;
+        $block = $newText = $openTag = $closeTag = '';
 
-        foreach ($tags as $name) {
-            $tag = new Tag($name);
-            $text = $tag->render($text);
+        for ($i = 0; $i < strlen($text); $i++) {
+            $char = $text[$i];
+            if ($char == '[' && $state == static::STATE_STARTED) {
+                $state = static::STATE_OPEN;
+            }
+            if ($char == '=' || $char == ' ' && $state == static::STATE_OPEN) {
+                $state = static::STATE_PARAMETER;
+            }
+            if ($char == ']' && in_array($state, [static::STATE_OPEN, static::STATE_PARAMETER])) {
+                $state = static::STATE_CONTENT;
+            }
+            if (preg_match('/[a-z0-9]/i', $char)) {
+                if ($state == static::STATE_OPEN) {
+                    $openTag .= $char;
+                } elseif ($state == static::STATE_CLOSE) {
+                    $closeTag .= $char;
+                }
+            }
+            if ($state != static::STATE_STARTED) {
+                $block .= $char;
+            } else {
+                $newText .= $char;
+            }
+            if ($char == '/' && $text[$i - 1] == '[') {
+                $state = static::STATE_CLOSE;
+            }
+            if ($char == ']' && $state == static::STATE_CLOSE) {
+                if ($openTag === $closeTag) {
+                    $state = static::STATE_STARTED;
+
+                    $tag = new Tag($openTag, $block);
+                    $newText .= $tag->render();
+
+                    $block = $openTag = $closeTag = '';
+                } else {
+                    $state = static::STATE_CONTENT;
+                    $closeTag = '';
+                }
+            }
         }
 
-        return $text;
-    }
-
-    /**
-     * @param string $text
-     * @return array
-     */
-    private function extractTags($text)
-    {
-        $pattern = '/\[([a-z0-9]+).*?\]/i';
-        preg_match_all($pattern, $text, $matches);
-
-        $tags = Arr::get($matches, 1);
-
-        return array_map('strtolower', $tags);
+        return $newText;
     }
 }
