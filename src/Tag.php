@@ -39,10 +39,12 @@ class Tag
 
     /**
      * @param string $name
+     * @param string $block
      */
-    public function __construct($name)
+    public function __construct($name, $block)
     {
         $this->name = $name;
+        $this->block = $block;
     }
 
     /**
@@ -256,6 +258,7 @@ class Tag
 
     /**
      * @return string
+     * @todo [quote=John Doe;2586133]Lorem ipsum dolor sit amet[/quote] Link to thread_id
      */
     public function tagQuote()
     {
@@ -271,6 +274,14 @@ HTML;
             $this->content,
             Arr::get($this->attributes, 'quote') ?: ''
         );
+    }
+
+    /**
+     * @return mixed
+     */
+    public function tagNoparse()
+    {
+        return $this->content;
     }
 
     /**
@@ -295,22 +306,19 @@ HTML;
     }
 
     /**
-     * @param string $text
      * @return string
      * @throws MissingTagException
      */
-    public function render($text)
+    public function render()
     {
         $method = 'tag'.ucfirst($this->name);
 
         if (method_exists($this, $method)) {
-            if ($this->split($text)) {
-                return str_replace(
-                    $this->block, $this->$method($text), $text
-                );
+            if ($this->split()) {
+                return $this->$method();
             }
 
-            return $text;
+            return $this->block;
         }
 
         throw new MissingTagException("Missing parser for $this->name tag");
@@ -335,23 +343,22 @@ HTML;
     }
 
     /**
-     * @param string $text
      * @internal param string $tag
      * @return bool
      */
-    protected function split($text)
+    protected function split()
     {
         $pattern = '/\[(%s[^\]]*)\](.*?)\[\/%s\]/is';
         $pattern = sprintf($pattern, $this->name, $this->name);
 
-        preg_match($pattern, $text, $match);
+        preg_match($pattern, $this->block, $match);
 
-        $this->block = Arr::get($match, 0, '');
+        $block = Arr::get($match, 0, '');
         $attributes = Arr::get($match, 1, '');
         $this->content = Arr::get($match, 2, '');
 
         $this->attributes = $this->splitAttributes($attributes);
 
-        return (bool)$this->block;
+        return (bool)$block;
     }
 }
