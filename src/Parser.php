@@ -36,8 +36,10 @@ class Parser
             if (in_array($char, ['=', ' ']) && $state == static::STATE_OPEN) {
                 $state = static::STATE_PARAMETER;
             }
-            if (in_array($state, [static::STATE_OPEN, static::STATE_PARAMETER]) && $text[$i - 1] == ']') {
-                $state = static::STATE_CONTENT;
+            if (in_array($state, [static::STATE_OPEN, static::STATE_PARAMETER])) {
+                if ($i > 0 && $text[$i - 1] == ']') {
+                    $state = static::STATE_CONTENT;
+                }
             }
             if (preg_match('/[a-z0-9]/i', $char)) {
                 if ($state == static::STATE_OPEN) {
@@ -57,12 +59,7 @@ class Parser
             if ($char == ']' && $state == static::STATE_CLOSE) {
                 if ($openTag === $closeTag) {
                     $state = static::STATE_STARTED;
-
-                    $tag = new Tag($openTag);
-                    $html = $tag->render($block);
-
-                    $newText .= $html;
-
+                    $newText = $this->replaceText($openTag, $block, $newText);
                     $block = $openTag = $closeTag = $content = '';
                 } else {
                     $state = static::STATE_CONTENT;
@@ -74,5 +71,23 @@ class Parser
         }
 
         return $newText;
+    }
+
+    /**
+     * @param $tagName
+     * @param $block
+     * @param $newText
+     * @return string
+     */
+    protected function replaceText($tagName, $block, $newText)
+    {
+        $tag = new Tag($tagName);
+        $html = $tag->render($block);
+
+        if ($tag->shouldRender()) {
+            $html = $this->parse($html);
+        }
+
+        return $newText.$html;
     }
 }
