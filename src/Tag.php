@@ -362,4 +362,12 @@ HTML;
 
         return (bool)$block;
     }
+
+    /**
+     * @return bool
+     */
+    public function shouldRender()
+    {
+        return $this->name !== 'noparse';
+    }
 }
