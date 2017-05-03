@@ -39,12 +39,10 @@ class Tag
 
     /**
      * @param string $name
-     * @param string $block
      */
-    public function __construct($name, $block)
+    public function __construct($name)
     {
         $this->name = $name;
-        $this->block = $block;
     }
 
     /**
@@ -306,19 +304,20 @@ HTML;
     }
 
     /**
+     * @param string $text
      * @return string
      * @throws MissingTagException
      */
-    public function render()
+    public function render($text)
     {
         $method = 'tag'.ucfirst($this->name);
 
         if (method_exists($this, $method)) {
-            if ($this->split()) {
-                return $this->$method();
+            if ($this->split($text)) {
+                return $this->$method($text);
             }
 
-            return $this->block;
+            return $text;
         }
 
         throw new MissingTagException("Missing parser for $this->name tag");
@@ -344,20 +343,22 @@ HTML;
 
     /**
      * @internal param string $tag
+     * @param string $block
      * @return bool
      */
-    protected function split()
+    protected function split($block)
     {
         $pattern = '/\[(%s[^\]]*)\](.*?)\[\/%s\]/is';
         $pattern = sprintf($pattern, $this->name, $this->name);
 
-        preg_match($pattern, $this->block, $match);
+        preg_match($pattern, $block, $match);
 
         $block = Arr::get($match, 0, '');
         $attributes = Arr::get($match, 1, '');
         $this->content = Arr::get($match, 2, '');
 
         $this->attributes = $this->splitAttributes($attributes);
+        $this->block = $block;
 
         return (bool)$block;
     }
