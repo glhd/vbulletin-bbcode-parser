@@ -318,6 +318,17 @@ OUTPUT;
     /**
      * @test
      */
+    public function parseNoparse()
+    {
+        $input = '[noparse][b]Lorem ipsum dolor sit amet[/b][/noparse] foo [b]something[/b] bar [b]Lorem ipsum dolor sit amet[/b]';
+        $output = '[b]Lorem ipsum dolor sit amet[/b] foo <strong>something</strong> bar <strong>Lorem ipsum dolor sit amet</strong>';
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function missingTagException()
     {
         $this->expectException(MissingTagException::class);

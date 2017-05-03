@@ -58,8 +58,8 @@ class Parser
                 if ($openTag === $closeTag) {
                     $state = static::STATE_STARTED;
 
-                    $tag = new Tag($openTag, $block);
-                    $newText .= $tag->render();
+                    $tag = new Tag($openTag);
+                    $newText .= $tag->render($block);
 
                     $block = $openTag = $closeTag = '';
                 } else {
