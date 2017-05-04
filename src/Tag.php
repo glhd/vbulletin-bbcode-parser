@@ -200,84 +200,6 @@ class Tag
     }
 
     /**
-     * @return string
-     */
-    public function tagAlign()
-    {
-        if ($position = Arr::first($this->attributes)) {
-            return $this->renderTextAlignment($position);
-        }
-
-        return $this->block;
-    }
-
-    /**
-     * @return string
-     */
-    public function tagFloatright()
-    {
-        return sprintf(
-            '<div style="float: right;">%s</div>',
-            $this->content
-        );
-    }
-
-    /**
-     * @return string
-     */
-    public function tagH2()
-    {
-        return '<h2>'.$this->content.'</h2>';
-    }
-
-    /**
-     * @return string
-     */
-    public function tagH3()
-    {
-        return '<h3>'.$this->content.'</h3>';
-    }
-
-    /**
-     * @return string
-     */
-    public function tagHigh()
-    {
-        return '<mark>'.$this->content.'</mark>';
-    }
-
-    /**
-     * @return string
-     */
-    public function tagHr()
-    {
-        return '<hr />'.$this->content.'<hr />';
-    }
-
-    /**
-     * @param string $text
-     * @param string $position
-     * @return string
-     */
-    public function tagImglft($text, $position = 'left')
-    {
-        return <<<HTML
-<span style="float: $position;">
-    <img src="{$this->content}" alt="">
-</span>
-HTML;
-    }
-
-    /**
-     * @param string $text
-     * @return string
-     */
-    public function tagImgrft($text)
-    {
-        return $this->tagImglft($text, 'right');
-    }
-
-    /**
      * @param string $text
      * @return string
      */
@@ -374,6 +296,84 @@ HTML;
     public function tagA()
     {
         // TODO
+    }
+
+    /**
+     * @return string
+     */
+    public function tagAlign()
+    {
+        if ($position = Arr::first($this->attributes)) {
+            return $this->renderTextAlignment($position);
+        }
+
+        return $this->block;
+    }
+
+    /**
+     * @return string
+     */
+    public function tagFloatright()
+    {
+        return sprintf(
+            '<div style="float: right;">%s</div>',
+            $this->content
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function tagH2()
+    {
+        return '<h2>'.$this->content.'</h2>';
+    }
+
+    /**
+     * @return string
+     */
+    public function tagH3()
+    {
+        return '<h3>'.$this->content.'</h3>';
+    }
+
+    /**
+     * @return string
+     */
+    public function tagHigh()
+    {
+        return '<mark>'.$this->content.'</mark>';
+    }
+
+    /**
+     * @return string
+     */
+    public function tagHr()
+    {
+        return '<hr />'.$this->content.'<hr />';
+    }
+
+    /**
+     * @param string $text
+     * @param string $position
+     * @return string
+     */
+    public function tagImglft($text, $position = 'left')
+    {
+        return <<<HTML
+<span style="float: $position;">
+    <img src="{$this->content}" alt="">
+</span>
+HTML;
+    }
+
+    /**
+     * @param string $text
+     * @return string
+     */
+    public function tagImgrft($text)
+    {
+        return $this->tagImglft($text, 'right');
     }
 
     /**
