@@ -311,12 +311,15 @@ HTML;
     }
 
     /**
+     * @param string $text
+     * @param string $position
      * @return string
      */
-    public function tagFloatright()
+    public function tagFloatright($text, $position = 'right')
     {
         return sprintf(
-            '<div style="float: right;">%s</div>',
+            '<div style="float: %s;">%s</div>',
+            $position,
             $this->content
         );
     }
@@ -379,13 +382,32 @@ HTML;
     /**
      * @return string
      */
+    public function tagJira()
+    {
+        // TODO
+    }
+
+    /**
+     * @param string $text
+     * @return string
+     */
+    public function tagLft($text)
+    {
+        return $this->tagFloatright($text, 'left');
+    }
+
+    /**
+     * @return string
+     */
     public function tagB()
     {
         return sprintf(
             '<strong>%s</strong>',
+
             $this->content
         );
     }
+
 
     /**
      * @throws MissingAttributeException

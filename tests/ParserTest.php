@@ -403,6 +403,17 @@ OUTPUT;
     /**
      * @test
      */
+    public function parseLft()
+    {
+        $input = '[lft]This is a text.[/lft]';
+        $output = '<div style="float: left;">This is a text.</div>';
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function missingTagException()
     {
         $this->expectException(MissingTagException::class);
