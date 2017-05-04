@@ -239,6 +239,22 @@ class Tag
     }
 
     /**
+     * @return string
+     */
+    public function tagHigh()
+    {
+        return '<mark>'.$this->content.'</mark>';
+    }
+
+    /**
+     * @return string
+     */
+    public function tagHr()
+    {
+        return '<hr />'.$this->content.'<hr />';
+    }
+
+    /**
      * @param string $text
      * @return string
      */

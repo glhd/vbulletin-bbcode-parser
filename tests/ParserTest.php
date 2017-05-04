@@ -363,6 +363,28 @@ OUTPUT;
     /**
      * @test
      */
+    public function parseHigh()
+    {
+        $input = '[high]This text is highlighted[/high]';
+        $output = '<mark>This text is highlighted</mark>';
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
+    public function parseHr()
+    {
+        $input = '[hr]The text goes here.[/hr]';
+        $output = '<hr />The text goes here.<hr />';
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function missingTagException()
     {
         $this->expectException(MissingTagException::class);
