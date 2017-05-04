@@ -189,6 +189,8 @@ class Tag
     public function tagThread()
     {
         // TODO
+
+        return $this->block;
     }
 
     /**
@@ -197,6 +199,8 @@ class Tag
     public function tagPost()
     {
         // TODO
+
+        return $this->block;
     }
 
     /**
@@ -288,6 +292,8 @@ HTML;
     public function tagAttach()
     {
         // TODO
+
+        return $this->block;
     }
 
     /**
@@ -296,6 +302,8 @@ HTML;
     public function tagA()
     {
         // TODO
+
+        return $this->block;
     }
 
     /**
@@ -385,6 +393,8 @@ HTML;
     public function tagJira()
     {
         // TODO
+
+        return $this->block;
     }
 
     /**
@@ -394,6 +404,16 @@ HTML;
     public function tagLft($text)
     {
         return $this->tagFloatright($text, 'left');
+    }
+
+    /**
+     * @return string
+     */
+    public function tagMinicode()
+    {
+        // TODO
+
+        return $this->block;
     }
 
     /**
