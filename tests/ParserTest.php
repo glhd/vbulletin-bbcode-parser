@@ -338,6 +338,17 @@ OUTPUT;
     /**
      * @test
      */
+    public function parseFloatRight()
+    {
+        $input = '[floatright]This text will float right.[/floatright]';
+        $output = '<div style="float: right;">This text will float right.</div>';
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function missingTagException()
     {
         $this->expectException(MissingTagException::class);

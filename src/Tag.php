@@ -212,6 +212,17 @@ class Tag
     }
 
     /**
+     * @return string
+     */
+    public function tagFloatright()
+    {
+        return sprintf(
+            '<div style="float: right;">%s</div>',
+            $this->content
+        );
+    }
+
+    /**
      * @param string $text
      * @return string
      */
