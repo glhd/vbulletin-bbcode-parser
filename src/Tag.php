@@ -223,6 +223,22 @@ class Tag
     }
 
     /**
+     * @return string
+     */
+    public function tagH2()
+    {
+        return '<h2>'.$this->content.'</h2>';
+    }
+
+    /**
+     * @return string
+     */
+    public function tagH3()
+    {
+        return '<h3>'.$this->content.'</h3>';
+    }
+
+    /**
      * @param string $text
      * @return string
      */

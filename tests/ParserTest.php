@@ -349,6 +349,20 @@ OUTPUT;
     /**
      * @test
      */
+    public function parseHeaders()
+    {
+        $input = '[h2]Header[/h2]';
+        $output = '<h2>Header</h2>';
+        $this->assertEquals($output, $this->parser()->parse($input));
+
+        $input = '[h3]Header[/h3]';
+        $output = '<h3>Header</h3>';
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function missingTagException()
     {
         $this->expectException(MissingTagException::class);
