@@ -385,6 +385,24 @@ OUTPUT;
     /**
      * @test
      */
+    public function parseImageLeftAndRight()
+    {
+        $options = ['imglft' => 'left', 'imgrft' => 'right'];
+
+        foreach ($options as $tag => $position) {
+            $input = "[{$tag}]http://example.com/foo.jpg[/{$tag}]";
+            $output = <<<OUTPUT
+<span style="float: $position;">
+    <img src="http://example.com/foo.jpg" alt="">
+</span>
+OUTPUT;
+            $this->assertEquals($output, $this->parser()->parse($input));
+        }
+    }
+
+    /**
+     * @test
+     */
     public function missingTagException()
     {
         $this->expectException(MissingTagException::class);

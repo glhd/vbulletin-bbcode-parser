@@ -256,6 +256,29 @@ class Tag
 
     /**
      * @param string $text
+     * @param string $position
+     * @return string
+     */
+    public function tagImglft($text, $position = 'left')
+    {
+        return <<<HTML
+<span style="float: $position;">
+    <img src="{$this->content}" alt="">
+</span>
+HTML;
+    }
+
+    /**
+     * @param string $text
+     * @return string
+     */
+    public function tagImgrft($text)
+    {
+        return $this->tagImglft($text, 'right');
+    }
+
+    /**
+     * @param string $text
      * @return string
      */
     public function tagList($text)
