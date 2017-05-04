@@ -7,8 +7,6 @@ use Galahad\Bbcode\Exception\MissingTagException;
 use Galahad\Bbcode\Parser;
 use PHPUnit\Framework\TestCase;
 
-// TODO test number of blocks found in a text
-
 /**
  * Class ParserTest
  *
@@ -322,6 +320,17 @@ OUTPUT;
     {
         $input = '[noparse][b]Lorem ipsum dolor sit amet[/b][/noparse]';
         $output = '[b]Lorem ipsum dolor sit amet[/b]';
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
+    public function parseAlign()
+    {
+        $input = '[align=center]text alignment[/align]';
+        $output = '<div style="text-align: center;">text alignment</div>';
 
         $this->assertEquals($output, $this->parser()->parse($input));
     }

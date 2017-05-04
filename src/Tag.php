@@ -200,6 +200,18 @@ class Tag
     }
 
     /**
+     * @return string
+     */
+    public function tagAlign()
+    {
+        if ($position = Arr::first($this->attributes)) {
+            return $this->renderTextAlignment($position);
+        }
+
+        return $this->block;
+    }
+
+    /**
      * @param string $text
      * @return string
      */
@@ -275,11 +287,27 @@ HTML;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function tagNoparse()
     {
         return $this->content;
+    }
+
+    /**
+     * @return string
+     */
+    public function tagAttach()
+    {
+        // TODO
+    }
+
+    /**
+     * @return string
+     */
+    public function tagA()
+    {
+        // TODO
     }
 
     /**
