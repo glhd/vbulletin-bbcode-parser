@@ -171,6 +171,22 @@ class ParserTest extends TestCase
     /**
      * @test
      */
+    public function parsePost()
+    {
+        $url = 'http://example.com/posts/269302';
+
+        $input = '[post=269302]Click Me![/post]';
+        $output = sprintf('<a href="%s">Click Me!</a>', $url);
+        $this->assertEquals($output, $this->parser()->parse($input));
+
+        $input = '[post]269302[/post]';
+        $output = sprintf('<a href="%1$s">%1$s</a>', $url);
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function parseBulletList()
     {
         $list =<<<TEXT
@@ -445,7 +461,7 @@ OUTPUT;
     {
         return new Parser([
             'thread_url' => 'http://example.com/thread/{thread_id}/bar',
-            'post_url' => 'http://example.com/thread/{thread_id}/posts/{post_id}',
+            'post_url' => 'http://example.com/posts/{post_id}',
         ]);
     }
 }

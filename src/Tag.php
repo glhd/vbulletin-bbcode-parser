@@ -212,9 +212,15 @@ class Tag
      */
     public function tagPost()
     {
-        // TODO
+        $this->validateUrl('post_url');
 
-        return $this->block;
+        $url = Arr::get($this->urls, 'post_url');
+        $id = Arr::get($this->attributes, 'post', $this->content);
+
+        $url = str_replace('{post_id}', $id, $url);
+        $content = $this->content === $id ? $url : $this->content;
+
+        return sprintf('<a href="%s">%s</a>', $url, $content);
     }
 
     /**
