@@ -111,14 +111,16 @@ OUTPUT;
     {
         $input = <<<INPUT
 [noparse]
-[b][font=Arial]Lorem ipsum dolor sit amet[/font][/b]
+[b][font=Arial]Lorem ipsum dolor sit amet[/font][/b][color=red]color red[/color]
 [/noparse] foo [b]something[/b] bar 
+[color=red]color red[/color]
 [b]Lorem ipsum dolor sit amet[/b]
 INPUT;
 
         $output = <<<OUTPUT
-\n[b][font=Arial]Lorem ipsum dolor sit amet[/font][/b]
+\n[b][font=Arial]Lorem ipsum dolor sit amet[/font][/b][color=red]color red[/color]
  foo <strong>something</strong> bar 
+<span style="color: red;">color red</span>
 <strong>Lorem ipsum dolor sit amet</strong>
 OUTPUT;
 
