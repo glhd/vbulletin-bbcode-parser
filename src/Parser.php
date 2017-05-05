@@ -15,12 +15,6 @@ use Illuminate\Support\Collection;
  */
 class Parser
 {
-    const STATE_STOP = 0;
-    const STATE_OPEN = 1;
-    const STATE_PARAMETER = 2;
-    const STATE_CONTENT = 3;
-    const STATE_CLOSE = 4;
-
     /**
      * @var array
      */
