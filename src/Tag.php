@@ -488,12 +488,19 @@ HTML;
 
     /**
      * @param string $block
-     * @param Closure $callable
+     * @param $callable
      * @return string
+     * @todo Add test case for Class with custom validation
      */
     public function renderCustom($block, $callable)
     {
         $this->split($block);
+
+        if (is_string($callable)) {
+            return (new $callable(
+                $block, $this->attributes, $this->content
+            ))->$this->render($block);
+        }
 
         return call_user_func_array($callable, [
             $block, $this->attributes, $this->content

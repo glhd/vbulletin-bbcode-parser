@@ -119,10 +119,9 @@ class Parser
 
     /**
      * @param string $tag
-     * @param Closure $callable
-     * @todo Add support to custom class
+     * @param $callable
      */
-    public function extend($tag, Closure $callable)
+    public function extend($tag, $callable)
     {
         $this->customParsers[$tag] = $callable;
     }
