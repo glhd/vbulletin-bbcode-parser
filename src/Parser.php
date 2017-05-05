@@ -103,18 +103,15 @@ class Parser
 
         try {
             $text = $tag->render($block);
-
-            if ($tag->shouldRender()) {
-                return $this->parse($text);
-            }
         } catch (MissingTagException $e) {
-            if (isset($this->customParsers[$tagName])) {
-                $callable = Arr::get($this->customParsers, $tagName);
+            $this->validateMissingTag($tagName);
 
-                return $tag->renderCustom($block, $callable);
-            }
+            $callable = Arr::get($this->customParsers, $tagName);
+            $text = $tag->renderCustom($block, $callable);
+        }
 
-            throw new MissingTagException($tagName);
+        if ($tag->shouldRender()) {
+            return $this->parse($text);
         }
 
         return $text;
@@ -123,9 +120,21 @@ class Parser
     /**
      * @param string $tag
      * @param Closure $callable
+     * @todo Add support to custom class
      */
     public function extend($tag, Closure $callable)
     {
         $this->customParsers[$tag] = $callable;
+    }
+
+    /**
+     * @param string $tagName
+     * @throws MissingTagException
+     */
+    private function validateMissingTag($tagName)
+    {
+        if (!isset($this->customParsers[$tagName])) {
+            throw new MissingTagException($tagName);
+        }
     }
 }
