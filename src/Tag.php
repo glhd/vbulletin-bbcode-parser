@@ -2,6 +2,7 @@
 
 namespace Galahad\Bbcode;
 
+use Closure;
 use Galahad\Bbcode\Exception\MissingAttributeException;
 use Galahad\Bbcode\Exception\MissingTagException;
 use Galahad\Bbcode\Exception\MissingUrlException;
@@ -482,7 +483,21 @@ HTML;
             return $text;
         }
 
-        throw new MissingTagException("Missing parser for $this->name tag");
+        throw new MissingTagException($this->name);
+    }
+
+    /**
+     * @param string $block
+     * @param Closure $callable
+     * @return string
+     */
+    public function renderCustom($block, $callable)
+    {
+        $this->split($block);
+
+        return call_user_func_array($callable, [
+            $block, $this->attributes, $this->content
+        ]);
     }
 
     /**
