@@ -449,9 +449,12 @@ OUTPUT;
      */
     public function parseCustom()
     {
-        $input = '[jgrossi repo="package-php"]Junior Grossi[/jgrossi]';
-        $output = '<a href="http://github.com/jgrossi/package-php">Junior Grossi</a>';
+        $input = '[jgrossi repo="foo"]Junior Grossi[/jgrossi]';
+        $output = '<a href="http://github.com/jgrossi/foo">Junior Grossi</a>';
+        $this->assertEquals($output, $this->customParser()->parse($input));
 
+        $input = '[jgrossi repo="bar"][b]Junior Grossi[/b][/jgrossi]';
+        $output = '<a href="http://github.com/jgrossi/bar"><strong>Junior Grossi</strong></a>';
         $this->assertEquals($output, $this->customParser()->parse($input));
     }
 
