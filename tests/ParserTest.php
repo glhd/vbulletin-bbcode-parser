@@ -446,6 +446,17 @@ OUTPUT;
     /**
      * @test
      */
+    public function parseCustom()
+    {
+        $input = '[jgrossi]Junior Grossi[/jgrossi]';
+        $output = '<a href="http://jgrossi.com">Junior Grossi</a>';
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function missingTagException()
     {
         $this->expectException(MissingTagException::class);
@@ -459,9 +470,15 @@ OUTPUT;
      */
     private function parser()
     {
-        return new Parser([
+        $parser = new Parser([
             'thread_url' => 'http://example.com/thread/{thread_id}/bar',
             'post_url' => 'http://example.com/posts/{post_id}',
         ]);
+
+        $parser->extend('jgrossi', function ($block, $attributes, $content) {
+            return '<a href="http://jgrossi.com">'.$content.'</a>';
+        });
+
+        return $parser;
     }
 }
