@@ -38,11 +38,18 @@ class Tag
     protected $attributes;
 
     /**
-     * @param string $name
+     * @var array
      */
-    public function __construct($name)
+    protected $urls;
+
+    /**
+     * @param string $name
+     * @param array $urls
+     */
+    public function __construct($name, array $urls = [])
     {
         $this->name = $name;
+        $this->urls = $urls;
     }
 
     /**

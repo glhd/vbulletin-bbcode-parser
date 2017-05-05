@@ -20,6 +20,19 @@ class Parser
     const STATE_CLOSE = 4;
 
     /**
+     * @var array
+     */
+    protected $urls = [];
+
+    /**
+     * @param array $urls
+     */
+    public function __construct(array $urls = [])
+    {
+        $this->urls = $urls;
+    }
+
+    /**
      * @param string $text
      * @return string
      */
@@ -78,7 +91,7 @@ class Parser
      */
     protected function parseBlock($tagName, $block)
     {
-        $tag = new Tag($tagName);
+        $tag = new Tag($tagName, $this->urls);
         $text = $tag->render($block);
 
         if ($tag->shouldRender()) {
