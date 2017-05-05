@@ -2,6 +2,8 @@
 
 namespace Galahad\Bbcode;
 
+use Closure;
+use Galahad\Bbcode\Exception\MissingTagException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
@@ -23,6 +25,11 @@ class Parser
      * @var array
      */
     protected $urls = [];
+
+    /**
+     * @var array
+     */
+    protected $customParsers = [];
 
     /**
      * @param array $urls
@@ -88,16 +95,37 @@ class Parser
      * @param string $tagName
      * @param string $block
      * @return string
+     * @throws MissingTagException
      */
     protected function parseBlock($tagName, $block)
     {
         $tag = new Tag($tagName, $this->urls);
-        $text = $tag->render($block);
 
-        if ($tag->shouldRender()) {
-            return $this->parse($text);
+        try {
+            $text = $tag->render($block);
+
+            if ($tag->shouldRender()) {
+                return $this->parse($text);
+            }
+        } catch (MissingTagException $e) {
+            if (isset($this->customParsers[$tagName])) {
+                $callable = Arr::get($this->customParsers, $tagName);
+
+                return $tag->renderCustom($block, $callable);
+            }
+
+            throw new MissingTagException($tagName);
         }
 
         return $text;
+    }
+
+    /**
+     * @param string $tag
+     * @param Closure $callable
+     */
+    public function extend($tag, Closure $callable)
+    {
+        $this->customParsers[$tag] = $callable;
     }
 }
