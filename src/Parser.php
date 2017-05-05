@@ -45,59 +45,22 @@ class Parser
      */
     public function parse($text)
     {
-        $state = static::STATE_STOP;
-        $block = $newText = $openTag = $closeTag = '';
+        $pattern = '/\[([a-z0-9]+).*?\].*?\[\/\1\]/is';
 
-        for ($i = 0; $i < strlen($text); $i++) {
-            $char = $text[$i];
-            if ($char == '[' && $state == static::STATE_STOP) {
-                $state = static::STATE_OPEN;
-            }
-            if (in_array($char, ['=', ' ']) && $state == static::STATE_OPEN) {
-                $state = static::STATE_PARAMETER;
-            }
-            if (in_array($state, [static::STATE_OPEN, static::STATE_PARAMETER])) {
-                if ($i > 0 && $text[$i - 1] == ']') {
-                    $state = static::STATE_CONTENT;
-                }
-            }
-            if (preg_match('/[a-z0-9]/i', $char)) {
-                if ($state == static::STATE_OPEN) {
-                    $openTag .= $char;
-                } elseif ($state == static::STATE_CLOSE) {
-                    $closeTag .= $char;
-                }
-            }
-            if ($state != static::STATE_STOP) {
-                $block .= $char;
-            } else {
-                $newText .= $char;
-            }
-            if ($char == '[' && isset($text[$i + 1]) && $text[$i + 1] == '/') {
-                $state = static::STATE_CLOSE;
-            }
-            if ($char == ']' && $state == static::STATE_CLOSE) {
-                if ($openTag === $closeTag) {
-                    $state = static::STATE_STOP;
-                    $newText .= $this->parseBlock($openTag, $block);
-                    $block = $openTag = $closeTag = '';
-                } else {
-                    $state = static::STATE_CONTENT;
-                    $closeTag = '';
-                }
-            }
-        }
-
-        return $newText;
+        return preg_replace_callback($pattern, function ($match) {
+            return $this->parseBlock(
+                Arr::get($match, 0), Arr::get($match, 1)
+            );
+        }, $text);
     }
 
     /**
-     * @param string $tagName
      * @param string $block
+     * @param string $tagName
      * @return string
      * @throws MissingTagException
      */
-    protected function parseBlock($tagName, $block)
+    protected function parseBlock($block, $tagName)
     {
         $tag = new Tag($tagName, $this->urls);
 
