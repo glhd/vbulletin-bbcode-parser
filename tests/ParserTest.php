@@ -5,6 +5,7 @@ namespace Galahad\Bbcode\Tests;
 use Galahad\Bbcode\Exception\MissingAttributeException;
 use Galahad\Bbcode\Exception\MissingTagException;
 use Galahad\Bbcode\Parser;
+use Illuminate\Support\Arr;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -448,10 +449,10 @@ OUTPUT;
      */
     public function parseCustom()
     {
-        $input = '[jgrossi]Junior Grossi[/jgrossi]';
-        $output = '<a href="http://jgrossi.com">Junior Grossi</a>';
+        $input = '[jgrossi repo="package-php"]Junior Grossi[/jgrossi]';
+        $output = '<a href="http://github.com/jgrossi/package-php">Junior Grossi</a>';
 
-        $this->assertEquals($output, $this->parser()->parse($input));
+        $this->assertEquals($output, $this->customParser()->parse($input));
     }
 
     /**
@@ -470,13 +471,24 @@ OUTPUT;
      */
     private function parser()
     {
-        $parser = new Parser([
+        return new Parser([
             'thread_url' => 'http://example.com/thread/{thread_id}/bar',
             'post_url' => 'http://example.com/posts/{post_id}',
         ]);
+    }
+
+    /**
+     * @return Parser
+     */
+    private function customParser()
+    {
+        $parser = $this->parser();
 
         $parser->extend('jgrossi', function ($block, $attributes, $content) {
-            return '<a href="http://jgrossi.com">'.$content.'</a>';
+            $repo = Arr::get($attributes, 'repo');
+            $url = 'http://github.com/jgrossi/'.strtolower($repo);
+
+            return sprintf('<a href="%s">%s</a>', $url, $content);
         });
 
         return $parser;
