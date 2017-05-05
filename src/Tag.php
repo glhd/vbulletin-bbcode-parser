@@ -5,8 +5,7 @@ namespace Galahad\Bbcode;
 use Galahad\Bbcode\Exception\MissingAttributeException;
 use Galahad\Bbcode\Exception\MissingTagException;
 use Galahad\Bbcode\Exception\MissingUrlException;
-use Galahad\Bbcode\Tags\AdvancedList;
-use Galahad\Bbcode\Tags\BulletList;
+use Galahad\Bbcode\Tags\ListTag;
 use Illuminate\Support\Arr;
 
 /**
@@ -229,13 +228,9 @@ class Tag
      */
     public function tagList($text)
     {
-        if ($attribute = Arr::first($this->attributes)) {
-            $renderer = new AdvancedList($attribute);
-        } else {
-            $renderer = new BulletList();
-        }
+        $attribute = Arr::first($this->attributes);
 
-        return $renderer->render($text);
+        return (new ListTag($attribute))->render($text);
     }
 
     /**
