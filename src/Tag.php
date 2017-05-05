@@ -4,6 +4,7 @@ namespace Galahad\Bbcode;
 
 use Galahad\Bbcode\Exception\MissingAttributeException;
 use Galahad\Bbcode\Exception\MissingTagException;
+use Galahad\Bbcode\Exception\MissingUrlException;
 use Galahad\Bbcode\Tags\AdvancedList;
 use Galahad\Bbcode\Tags\BulletList;
 use Illuminate\Support\Arr;
@@ -195,9 +196,15 @@ class Tag
      */
     public function tagThread()
     {
-        // TODO
+        $this->validateUrl('thread_url');
 
-        return $this->block;
+        $url = Arr::get($this->urls, 'thread_url');
+        $id = Arr::get($this->attributes, 'thread', $this->content);
+
+        $url = str_replace('{thread_id}', $id, $url);
+        $content = $this->content === $id ? $url : $this->content;
+
+        return sprintf('<a href="%s">%s</a>', $url, $content);
     }
 
     /**
@@ -443,6 +450,17 @@ HTML;
     {
         if (empty(trim(Arr::first($this->attributes)))) {
             throw new MissingAttributeException();
+        }
+    }
+
+    /**
+     * @param string $key
+     * @throws MissingUrlException
+     */
+    protected function validateUrl($key)
+    {
+        if (!Arr::get($this->urls, $key)) {
+            throw new MissingUrlException();
         }
     }
 
