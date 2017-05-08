@@ -349,6 +349,23 @@ OUTPUT;
     /**
      * @test
      */
+    public function parseQuoteWithLinkToPost()
+    {
+        $input = '[quote=John Doe;12345]Lorem ipsum dolor sit amet[/quote]';
+        $url = 'http://example.com/posts/12345';
+        $output = <<<OUTPUT
+<blockquote>
+    <p>Lorem ipsum dolor sit amet</p>
+    <footer><a href="$url">John Doe</a></footer>
+</blockquote>
+OUTPUT;
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function parseNoparse()
     {
         $input = '[noparse][b]Lorem ipsum dolor sit amet[/b][/noparse]';

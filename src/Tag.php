@@ -268,10 +268,17 @@ class Tag
 
     /**
      * @return string
-     * @todo [quote=John Doe;2586133]Lorem ipsum dolor sit amet[/quote] Link to thread_id
      */
     public function tagQuote()
     {
+        $footer = Arr::get($this->attributes, 'quote', '');
+
+        if (strpos($footer, ';') !== false) {
+            list($name, $postId) = explode(';', $footer);
+            $url = $this->fetchUrl('post_url', $postId);
+            $footer = sprintf('<a href="%s">%s</a>', $url, $name);
+        }
+
         $html = <<<HTML
 <blockquote>
     <p>%s</p>
@@ -279,11 +286,7 @@ class Tag
 </blockquote>
 HTML;
 
-        return sprintf(
-            $html,
-            $this->content,
-            Arr::get($this->attributes, 'quote') ?: ''
-        );
+        return sprintf($html, $this->content, $footer);
     }
 
     /**
@@ -321,11 +324,11 @@ HTML;
      */
     public function tagAlign()
     {
-        if ($position = Arr::first($this->attributes)) {
-            return $this->renderTextAlignment($position);
-        }
+        $this->validateAttribute();
 
-        return $this->block;
+        return $this->renderTextAlignment(
+            Arr::first($this->attributes)
+        );
     }
 
     /**
@@ -347,7 +350,7 @@ HTML;
      */
     public function tagH2()
     {
-        return '<h2>'.$this->content.'</h2>';
+        return '<h2>' . $this->content . '</h2>';
     }
 
     /**
@@ -355,7 +358,7 @@ HTML;
      */
     public function tagH3()
     {
-        return '<h3>'.$this->content.'</h3>';
+        return '<h3>' . $this->content . '</h3>';
     }
 
     /**
@@ -363,7 +366,7 @@ HTML;
      */
     public function tagHigh()
     {
-        return '<mark>'.$this->content.'</mark>';
+        return '<mark>' . $this->content . '</mark>';
     }
 
     /**
@@ -371,7 +374,7 @@ HTML;
      */
     public function tagHr()
     {
-        return '<hr />'.$this->content.'<hr />';
+        return '<hr />' . $this->content . '<hr />';
     }
 
     /**
@@ -381,9 +384,11 @@ HTML;
      */
     public function tagImglft($text, $position = 'left')
     {
-        return <<<HTML
-<img src="{$this->content}" alt="" style="float: $position;">
-HTML;
+        return sprintf(
+            '<img src="%s" alt="" style="float: %s;">',
+            $this->content,
+            $position
+        );
     }
 
     /**
@@ -463,10 +468,9 @@ HTML;
             throw new MissingUrlException();
         }
 
-        if ($this->name && $id) {
-            return str_replace(
-                '{'.strtolower($this->name).'_id}', $id, $url
-            );
+        if ($id) {
+            $parameter = str_replace('_url', '_id', $key);
+            $url = str_replace('{' . $parameter . '}', $id, $url);
         }
 
         return $url;
@@ -479,7 +483,7 @@ HTML;
      */
     public function render($text)
     {
-        $method = 'tag'.ucfirst($this->name);
+        $method = 'tag' . ucfirst($this->name);
 
         if (method_exists($this, $method)) {
             if ($this->split($text)) {
@@ -496,7 +500,6 @@ HTML;
      * @param string $block
      * @param $callable
      * @return string
-     * @todo Add test case for Class with custom validation
      */
     public function renderCustom($block, $callable)
     {
@@ -508,7 +511,9 @@ HTML;
         }
 
         return call_user_func_array($callable, [
-            $block, $this->attributes, $this->content
+            $block,
+            $this->attributes,
+            $this->content
         ]);
     }
 
