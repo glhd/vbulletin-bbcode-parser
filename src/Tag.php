@@ -8,6 +8,7 @@ use Galahad\Bbcode\Exception\MissingTagException;
 use Galahad\Bbcode\Exception\MissingUrlException;
 use Galahad\Bbcode\Tags\ListTag;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 /**
  * Class Tag
@@ -489,6 +490,25 @@ HTML;
     public function tagPre()
     {
         return sprintf('<pre>%s</pre>', $this->content);
+    }
+
+    /**
+     * @return string
+     */
+    public function tagProcess()
+    {
+        $html = '<ol class="breadcrumb">';
+        $items = array_map('trim', explode('>', $this->content));
+
+        foreach ($items as $i => $item) {
+            if ($i === count($items) - 1) {
+                $html .= sprintf('<li class="active">%s</li>', $item);
+            } else {
+                $html .= sprintf('<li><a>%s</a></li>', $item);
+            }
+        }
+
+        return $html . '</ol>';
     }
 
     /**

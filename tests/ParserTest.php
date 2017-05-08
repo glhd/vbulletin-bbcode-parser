@@ -548,6 +548,17 @@ OUTPUT;
     /**
      * @test
      */
+    public function parseProcess()
+    {
+        $input = '[process]Foo > Bar[/process]';
+        $output = '<ol class="breadcrumb"><li><a>Foo</a></li><li class="active">Bar</li></ol>';
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function parseCustom()
     {
         $input = '[jgrossi repo="foo"]Junior Grossi[/jgrossi]';
