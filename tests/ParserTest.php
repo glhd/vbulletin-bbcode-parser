@@ -526,6 +526,17 @@ OUTPUT;
     /**
      * @test
      */
+    public function parseNote()
+    {
+        $input = '[note]Foo bar.[/note]';
+        $output = '<div class="alert alert-info">Foo bar.</div>';
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function parseCustom()
     {
         $input = '[jgrossi repo="foo"]Junior Grossi[/jgrossi]';

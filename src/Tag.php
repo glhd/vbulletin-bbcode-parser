@@ -466,6 +466,24 @@ HTML;
     }
 
     /**
+     * @return string
+     */
+    public function tagNode()
+    {
+        // TODO
+
+        return $this->block;
+    }
+
+    /**
+     * @return string
+     */
+    public function tagNote()
+    {
+        return sprintf('<div class="alert alert-info">%s</div>', $this->content);
+    }
+
+    /**
      * @throws MissingAttributeException
      */
     protected function validateAttribute()
