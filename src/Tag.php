@@ -307,10 +307,11 @@ HTML;
      */
     public function tagAttach()
     {
-        $this->validateUrl('attach_url');
+        $url = $this->validateUrl('attach_url');
         $id = $this->content;
+        $url = str_replace('{attach_id}', $id, $url);
 
-        return $this->block;
+        return sprintf('<a href="%1$s">%1$s</a>', $url);
     }
 
     /**

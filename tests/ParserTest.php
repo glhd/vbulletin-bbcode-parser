@@ -360,6 +360,18 @@ OUTPUT;
     /**
      * @test
      */
+    public function parseAttach()
+    {
+        $input = '[attach]12345[/attach]';
+        $url = 'http://example.com/attach/12345';
+        $output = sprintf('<a href="%1$s">%1$s</a>', $url);
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function parseAlign()
     {
         $input = '[align=center]text alignment[/align]';
@@ -477,6 +489,7 @@ OUTPUT;
         return new Parser([
             'thread_url' => 'http://example.com/thread/{thread_id}/bar',
             'post_url' => 'http://example.com/posts/{post_id}',
+            'attach_url' => 'http://example.com/attach/{attach_id}',
         ]);
     }
 
