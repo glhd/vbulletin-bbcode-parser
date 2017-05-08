@@ -2,10 +2,8 @@
 
 namespace Galahad\Bbcode;
 
-use Closure;
 use Galahad\Bbcode\Exception\MissingTagException;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 
 /**
  * Class Parser
@@ -41,7 +39,7 @@ class Parser
     {
         $pattern = '/\[([a-z0-9]+).*?\].*?\[\/\1\]/is';
 
-        return preg_replace_callback($pattern, function ($match) {
+        return preg_replace_callback($pattern, function (array $match) {
             return $this->parseBlock(
                 Arr::get($match, 0), Arr::get($match, 1)
             );
@@ -67,7 +65,7 @@ class Parser
             $text = $tag->renderCustom($block, $callable);
         }
 
-        if ($tag->shouldRender()) {
+        if ($tag->hasChildren()) {
             return $this->parse($text);
         }
 

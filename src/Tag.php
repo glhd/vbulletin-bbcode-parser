@@ -550,8 +550,11 @@ HTML;
     /**
      * @return bool
      */
-    public function shouldRender()
+    public function hasChildren()
     {
-        return $this->name !== 'noparse';
+        $pattern = '/\[([a-z0-9]+).*?\].*?\[\/\1\]/is';
+
+        return preg_match($pattern, $this->content)
+            && $this->name !== 'noparse';
     }
 }
