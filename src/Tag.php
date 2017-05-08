@@ -408,9 +408,13 @@ HTML;
      */
     public function tagJira()
     {
-        // TODO
+        $url = $this->fetchUrl('jira_url');
 
-        return $this->block;
+        return sprintf(
+            '<a href="%s">%s</a>',
+            str_replace('{jira_id}', $this->content, $url),
+            strtoupper($this->content)
+        );
     }
 
     /**

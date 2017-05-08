@@ -459,6 +459,18 @@ OUTPUT;
     /**
      * @test
      */
+    public function parseJira()
+    {
+        $input = '[jira]vbiv-123[/jira]';
+        $url = 'http://tracker.vbulletin.com/browse/vbiv-123';
+        $output = sprintf('<a href="%s">%s</a>', $url, 'VBIV-123');
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function parseLft()
     {
         $input = '[lft]This is a text.[/lft]';
@@ -501,6 +513,7 @@ OUTPUT;
             'thread_url' => 'http://example.com/thread/{thread_id}/bar',
             'post_url' => 'http://example.com/posts/{post_id}',
             'attach_url' => 'http://example.com/attach/{attach_id}',
+            'jira_url' => 'http://tracker.vbulletin.com/browse/{jira_id}',
         ]);
     }
 
