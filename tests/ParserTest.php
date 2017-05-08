@@ -372,6 +372,17 @@ OUTPUT;
     /**
      * @test
      */
+    public function parseA()
+    {
+        $input = '[a=#foo]Anchor Text[/a]';
+        $output = '<a href="#foo">Anchor Text</a>';
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function parseAlign()
     {
         $input = '[align=center]text alignment[/align]';

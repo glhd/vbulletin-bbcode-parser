@@ -196,9 +196,7 @@ class Tag
      */
     public function tagThread()
     {
-        $this->validateUrl('thread_url');
-
-        $url = Arr::get($this->urls, 'thread_url');
+        $url = $this->fetchUrl('thread_url');
         $id = Arr::get($this->attributes, 'thread', $this->content);
 
         $url = str_replace('{thread_id}', $id, $url);
@@ -212,9 +210,7 @@ class Tag
      */
     public function tagPost()
     {
-        $this->validateUrl('post_url');
-
-        $url = Arr::get($this->urls, 'post_url');
+        $url = $this->fetchUrl('post_url');
         $id = Arr::get($this->attributes, 'post', $this->content);
 
         $url = str_replace('{post_id}', $id, $url);
@@ -307,7 +303,7 @@ HTML;
      */
     public function tagAttach()
     {
-        $url = $this->validateUrl('attach_url');
+        $url = $this->fetchUrl('attach_url');
         $id = $this->content;
         $url = str_replace('{attach_id}', $id, $url);
 
@@ -319,9 +315,11 @@ HTML;
      */
     public function tagA()
     {
-        // TODO
-
-        return $this->block;
+        return sprintf(
+            '<a href="%s">%s</a>',
+            Arr::first($this->attributes),
+            $this->content
+        );
     }
 
     /**
@@ -462,7 +460,7 @@ HTML;
      * @return string
      * @throws MissingUrlException
      */
-    protected function validateUrl($key)
+    protected function fetchUrl($key)
     {
         $url = Arr::get($this->urls, $key);
 
