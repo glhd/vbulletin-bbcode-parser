@@ -537,6 +537,17 @@ OUTPUT;
     /**
      * @test
      */
+    public function parsePre()
+    {
+        $input = '[pre]Foo bar.[/pre]';
+        $output = '<pre>Foo bar.</pre>';
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function parseCustom()
     {
         $input = '[jgrossi repo="foo"]Junior Grossi[/jgrossi]';

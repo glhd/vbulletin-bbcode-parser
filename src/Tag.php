@@ -484,6 +484,14 @@ HTML;
     }
 
     /**
+     * @return string
+     */
+    public function tagPre()
+    {
+        return sprintf('<pre>%s</pre>', $this->content);
+    }
+
+    /**
      * @throws MissingAttributeException
      */
     protected function validateAttribute()
@@ -517,6 +525,7 @@ HTML;
      * @param string $text
      * @return string
      * @throws MissingTagException
+     * @todo Allow users to override a tag using a custom class or Closure
      */
     public function render($text)
     {
