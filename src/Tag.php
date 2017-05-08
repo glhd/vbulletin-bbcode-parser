@@ -512,6 +512,15 @@ HTML;
     }
 
     /**
+     * @param string $text
+     * @return string
+     */
+    public function tagRft($text)
+    {
+        return $this->tagFloatright($text, 'right');
+    }
+
+    /**
      * @throws MissingAttributeException
      */
     protected function validateAttribute()

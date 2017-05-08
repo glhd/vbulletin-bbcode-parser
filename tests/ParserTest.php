@@ -559,6 +559,17 @@ OUTPUT;
     /**
      * @test
      */
+    public function parseRft()
+    {
+        $input = '[rft]This is a text.[/rft]';
+        $output = '<div style="float: right;">This is a text.</div>';
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function parseCustom()
     {
         $input = '[jgrossi repo="foo"]Junior Grossi[/jgrossi]';
