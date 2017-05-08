@@ -196,10 +196,8 @@ class Tag
      */
     public function tagThread()
     {
-        $url = $this->fetchUrl('thread_url');
         $id = Arr::get($this->attributes, 'thread', $this->content);
-
-        $url = str_replace('{thread_id}', $id, $url);
+        $url = $this->fetchUrl('thread_url', $id);
         $content = $this->content === $id ? $url : $this->content;
 
         return sprintf('<a href="%s">%s</a>', $url, $content);
@@ -210,10 +208,8 @@ class Tag
      */
     public function tagPost()
     {
-        $url = $this->fetchUrl('post_url');
         $id = Arr::get($this->attributes, 'post', $this->content);
-
-        $url = str_replace('{post_id}', $id, $url);
+        $url = $this->fetchUrl('post_url', $id);
         $content = $this->content === $id ? $url : $this->content;
 
         return sprintf('<a href="%s">%s</a>', $url, $content);
@@ -303,9 +299,7 @@ HTML;
      */
     public function tagAttach()
     {
-        $url = $this->fetchUrl('attach_url');
-        $id = $this->content;
-        $url = str_replace('{attach_id}', $id, $url);
+        $url = $this->fetchUrl('attach_url', $this->content);
 
         return sprintf('<a href="%1$s">%1$s</a>', $url);
     }
@@ -408,11 +402,9 @@ HTML;
      */
     public function tagJira()
     {
-        $url = $this->fetchUrl('jira_url');
-
         return sprintf(
             '<a href="%s">%s</a>',
-            str_replace('{jira_id}', $this->content, $url),
+            $this->fetchUrl('jira_url', $this->content),
             strtoupper($this->content)
         );
     }
