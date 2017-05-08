@@ -56,6 +56,30 @@ class Tag
     /**
      * @return string
      */
+    public function tagB()
+    {
+        return sprintf('<strong>%s</strong>', $this->content);
+    }
+
+    /**
+     * @return string
+     */
+    public function tagI()
+    {
+        return sprintf('<em>%s</em>', $this->content);
+    }
+
+    /**
+     * @return string
+     */
+    public function tagU()
+    {
+        return sprintf('<u>%s</u>', $this->content);
+    }
+
+    /**
+     * @return string
+     */
     public function tagColor()
     {
         $this->validateAttribute();
@@ -430,19 +454,6 @@ HTML;
 
         return $this->block;
     }
-
-    /**
-     * @return string
-     */
-    public function tagB()
-    {
-        return sprintf(
-            '<strong>%s</strong>',
-
-            $this->content
-        );
-    }
-
 
     /**
      * @throws MissingAttributeException

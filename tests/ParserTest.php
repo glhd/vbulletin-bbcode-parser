@@ -19,6 +19,20 @@ class ParserTest extends TestCase
     /**
      * @test
      */
+    public function parseBIUTags()
+    {
+        $options = ['b' => 'strong', 'i' => 'em', 'u' => 'u'];
+
+        foreach ($options as $tag => $newTag) {
+            $input = "[$tag]foo bar[/$tag]";
+            $output = "<$newTag>foo bar</$newTag>";
+            $this->assertEquals($output, $this->parser()->parse($input));
+        }
+    }
+
+    /**
+     * @test
+     */
     public function parseColor()
     {
         $colors = ['red', '#ff0000'];
