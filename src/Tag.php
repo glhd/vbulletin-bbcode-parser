@@ -473,18 +473,16 @@ HTML;
      */
     protected function fetchUrl($key, $id = null)
     {
-        $url = Arr::get($this->urls, $key);
+        if ($url = Arr::get($this->urls, $key)) {
+            if ($id !== null) {
+                $parameter = str_replace('_url', '_id', $key);
+                $url = str_replace('{' . $parameter . '}', $id, $url);
+            }
 
-        if (!$url) {
-            throw new MissingUrlException();
+            return $url;
         }
 
-        if ($id) {
-            $parameter = str_replace('_url', '_id', $key);
-            $url = str_replace('{' . $parameter . '}', $id, $url);
-        }
-
-        return $url;
+        throw new MissingUrlException();
     }
 
     /**
