@@ -448,9 +448,7 @@ OUTPUT;
         foreach ($options as $tag => $position) {
             $input = "[{$tag}]http://example.com/foo.jpg[/{$tag}]";
             $output = <<<OUTPUT
-<span style="float: $position;">
-    <img src="http://example.com/foo.jpg" alt="">
-</span>
+<img src="http://example.com/foo.jpg" alt="" style="float: $position;">
 OUTPUT;
             $this->assertEquals($output, $this->parser()->parse($input));
         }

@@ -382,9 +382,7 @@ HTML;
     public function tagImglft($text, $position = 'left')
     {
         return <<<HTML
-<span style="float: $position;">
-    <img src="{$this->content}" alt="">
-</span>
+<img src="{$this->content}" alt="" style="float: $position;">
 HTML;
     }
 
