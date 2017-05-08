@@ -461,15 +461,22 @@ HTML;
 
     /**
      * @param string $key
+     * @param null $id
      * @return string
      * @throws MissingUrlException
      */
-    protected function fetchUrl($key)
+    protected function fetchUrl($key, $id = null)
     {
         $url = Arr::get($this->urls, $key);
 
         if (!$url) {
             throw new MissingUrlException();
+        }
+
+        if ($this->name && $id) {
+            return str_replace(
+                '{'.strtolower($this->name).'_id}', $id, $url
+            );
         }
 
         return $url;
