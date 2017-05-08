@@ -307,7 +307,8 @@ HTML;
      */
     public function tagAttach()
     {
-        // TODO
+        $this->validateUrl('attach_url');
+        $id = $this->content;
 
         return $this->block;
     }
@@ -457,13 +458,18 @@ HTML;
 
     /**
      * @param string $key
+     * @return string
      * @throws MissingUrlException
      */
     protected function validateUrl($key)
     {
-        if (!Arr::get($this->urls, $key)) {
+        $url = Arr::get($this->urls, $key);
+
+        if (!$url) {
             throw new MissingUrlException();
         }
+
+        return $url;
     }
 
     /**
