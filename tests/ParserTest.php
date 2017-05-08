@@ -113,6 +113,9 @@ class ParserTest extends TestCase
                 $this->parser()->parse("[{$position}]{$text}[/{$position}]")
             );
         }
+
+        $this->expectException(MissingAttributeException::class);
+        $this->parser()->parse('[font]text[/font]');
     }
 
     /**
