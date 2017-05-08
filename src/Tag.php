@@ -456,6 +456,16 @@ HTML;
     }
 
     /**
+     * @return string
+     */
+    public function tagName()
+    {
+        $url = $this->fetchUrl('user_url', strtolower($this->content));
+
+        return sprintf('<a href="%s">%s</a>', $url, $this->content);
+    }
+
+    /**
      * @throws MissingAttributeException
      */
     protected function validateAttribute()

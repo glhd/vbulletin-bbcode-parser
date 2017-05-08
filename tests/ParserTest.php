@@ -514,6 +514,18 @@ OUTPUT;
     /**
      * @test
      */
+    public function parseName()
+    {
+        $input = '[name]Xenon[/name]';
+        $url = 'http://example.com/users/show/xenon';
+        $output = sprintf('<a href="%s">%s</a>', $url, 'Xenon');
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function parseCustom()
     {
         $input = '[jgrossi repo="foo"]Junior Grossi[/jgrossi]';
@@ -557,6 +569,7 @@ OUTPUT;
             'post_url' => 'http://example.com/posts/{post_id}',
             'attach_url' => 'http://example.com/attach/{attach_id}',
             'jira_url' => 'http://tracker.vbulletin.com/browse/{jira_id}',
+            'user_url' => 'http://example.com/users/show/{user_id}',
         ]);
     }
 
