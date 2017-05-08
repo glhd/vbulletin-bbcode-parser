@@ -56,6 +56,7 @@ class Parser
     {
         $tag = new Tag($tagName, $this->urls);
         $tag->setCustomParsers($this->customParsers);
+
         $text = $tag->render($block);
 
         if ($tag->hasChildren()) {
@@ -72,16 +73,5 @@ class Parser
     public function extend($tag, $callable)
     {
         $this->customParsers[$tag] = $callable;
-    }
-
-    /**
-     * @param string $tagName
-     * @throws MissingTagException
-     */
-    private function validateMissingTag($tagName)
-    {
-        if (!isset($this->customParsers[$tagName])) {
-            throw new MissingTagException($tagName);
-        }
     }
 }
