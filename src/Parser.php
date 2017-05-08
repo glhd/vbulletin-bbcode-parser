@@ -55,15 +55,8 @@ class Parser
     protected function parseBlock($block, $tagName)
     {
         $tag = new Tag($tagName, $this->urls);
-
-        try {
-            $text = $tag->render($block);
-        } catch (MissingTagException $e) {
-            $this->validateMissingTag($tagName);
-
-            $callable = Arr::get($this->customParsers, $tagName);
-            $text = $tag->renderCustom($block, $callable);
-        }
+        $tag->setCustomParsers($this->customParsers);
+        $text = $tag->render($block);
 
         if ($tag->hasChildren()) {
             return $this->parse($text);

@@ -45,6 +45,11 @@ class Tag
     protected $urls;
 
     /**
+     * @var array
+     */
+    protected $customParsers;
+
+    /**
      * @param string $name
      * @param array $urls
      */
@@ -52,6 +57,17 @@ class Tag
     {
         $this->name = $name;
         $this->urls = $urls;
+    }
+
+    /**
+     * @param array $parsers
+     * @return $this
+     */
+    public function setCustomParsers(array $parsers)
+    {
+        $this->customParsers = $parsers;
+
+        return $this;
     }
 
     /**
@@ -574,14 +590,14 @@ HTML;
      */
     public function render($text)
     {
+        $this->split($text);
+
         $method = 'tag' . ucfirst($this->name);
 
-        if (method_exists($this, $method)) {
-            if ($this->split($text)) {
-                return $this->$method($text);
-            }
-
-            return $text;
+        if (isset($this->customParsers[$this->name])) {
+            return $this->renderCustom($text);
+        } elseif (method_exists($this, $method)) {
+            return $this->$method($text);
         }
 
         throw new MissingTagException($this->name);
@@ -589,12 +605,11 @@ HTML;
 
     /**
      * @param string $block
-     * @param $callable
      * @return string
      */
-    public function renderCustom($block, $callable)
+    public function renderCustom($block)
     {
-        $this->split($block);
+        $callable = Arr::get($this->customParsers, $this->name);
 
         if (is_string($callable)) {
             return (new $callable())
@@ -602,9 +617,7 @@ HTML;
         }
 
         return call_user_func_array($callable, [
-            $block,
-            $this->attributes,
-            $this->content
+            $block, $this->attributes, $this->content
         ]);
     }
 
