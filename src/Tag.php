@@ -529,6 +529,14 @@ HTML;
     }
 
     /**
+     * @return string
+     */
+    public function tagWarning()
+    {
+        return sprintf('<div class="alert alert-warning">%s</div>', $this->content);
+    }
+
+    /**
      * @throws MissingAttributeException
      */
     protected function validateAttribute()

@@ -570,6 +570,17 @@ OUTPUT;
     /**
      * @test
      */
+    public function parseWarning()
+    {
+        $input = '[warning]Foo bar.[/warning]';
+        $output = '<div class="alert alert-warning">Foo bar.</div>';
+
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function parseCustom()
     {
         $input = '[jgrossi repo="foo"]Junior Grossi[/jgrossi]';
