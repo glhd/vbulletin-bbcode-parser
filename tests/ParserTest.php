@@ -496,6 +496,17 @@ OUTPUT;
     /**
      * @test
      */
+    public function parseCustomUsingClassName()
+    {
+        $input = '[foo]bar[/foo]';
+        $output = '<a href="#foo">bar</a>';
+
+        $this->assertEquals($output, $this->customParser()->parse($input));
+    }
+
+    /**
+     * @test
+     */
     public function missingTagException()
     {
         $this->expectException(MissingTagException::class);
@@ -530,6 +541,8 @@ OUTPUT;
 
             return sprintf('<a href="%s">%s</a>', $url, $content);
         });
+
+        $parser->extend('foo', FooTag::class);
 
         return $parser;
     }

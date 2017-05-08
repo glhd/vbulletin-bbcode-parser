@@ -505,9 +505,8 @@ HTML;
         $this->split($block);
 
         if (is_string($callable)) {
-            return (new $callable(
-                $block, $this->attributes, $this->content
-            ))->$this->render($block);
+            return (new $callable())
+                ->render($block, $this->attributes, $this->content);
         }
 
         return call_user_func_array($callable, [
