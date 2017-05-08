@@ -81,6 +81,14 @@ class Tag
     /**
      * @return string
      */
+    public function tagS()
+    {
+        return sprintf('<s>%s</s>', $this->content);
+    }
+
+    /**
+     * @return string
+     */
     public function tagColor()
     {
         $this->validateAttribute();

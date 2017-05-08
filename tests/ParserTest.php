@@ -19,9 +19,9 @@ class ParserTest extends TestCase
     /**
      * @test
      */
-    public function parseBIUTags()
+    public function parseBIUSTags()
     {
-        $options = ['b' => 'strong', 'i' => 'em', 'u' => 'u'];
+        $options = ['b' => 'strong', 'i' => 'em', 'u' => 'u', 's' => 's'];
 
         foreach ($options as $tag => $newTag) {
             $input = "[$tag]foo bar[/$tag]";
