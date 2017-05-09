@@ -21,11 +21,11 @@ composer require galahad/vbulletin-bbcode-parser
 
 # <a id="usage"></a> Usage
 
-# <a id="basic-usage"></a> Basic Usage
+## <a id="basic-usage"></a> Basic Usage
 
 ```php
 $bbcode = '[font=Times New Roman]foo bar text[/font]';
-  
+
 $parser = new Parser;
 echo $parser->parse($bbcode); // <span style="font-family: Times New Roman;">foo bar text</span>
 ```
@@ -46,23 +46,29 @@ $parser->parse('[post=269302]Click Me![/post]');
 
 > To see all tags supported by this package take a look on [Supported Tags](#tags) section.
 
-# <a id="custom"></a> Custom Tags
+## <a id="custom"></a> Custom Tags
 
 If you have a custom tag you want to customize, or even override the default behaviour of an internal one, just `extend` with your own tag name:
 
 ```php
 $parser = new Parser;
-  
+
 $parser->extend('foo', function ($block, array $attributes, $content) {
     return '<a href="http://foo.com/bar">' . $content . '</a>';
 });
-  
+
 echo $parser->parse('[foo]some text here[/foo]');
 ```
 
 As parameters received from the `extend()` method you have:
 
-- `$block`: the entire bbcode passed like `[foo]some text here[/foo]` in this case;
-- `$parameters`: an key/value array with all parameters we found in your bbcode, like `['font' => 'Times New Roman']` for the bbcode `[font=Times New Roman]foo bar text[/font]`;
-- `$content`: the tag content, like `some text here`.
+- `string $block`: the entire bbcode passed like `[foo]some text here[/foo]` in this case;
+- `array $attributes`: an key/value array with all attributes we found in your bbcode, like `['font' => 'Times New Roman']` for the bbcode `[font=Times New Roman]foo bar text[/font]`;
+- `mixed $content`: the tag content, like `some text here`.
 
+You can also extend our parser using a custom class. It might have a `render()` method receiving `$block`, `$attributes` and `$content` as parameters, and might implements `Galahad\Bbcode\Tags\CustomTagInterface` interface.
+
+```php
+$parser = new Parser;
+$parser->extend('foo', Foo\Bar\FooTag::class);
+```
