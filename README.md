@@ -1,6 +1,6 @@
-# vBulletin BBcode Parser
+# vBulletin bbCode Parser
 
-> Parse your vBulletin bbcodes in a very easy way.
+> Parser package for vBulletin bbCode
 
 # Contents
 
