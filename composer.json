@@ -1,4 +1,22 @@
 {
+    "name": "galahad/vbulletin-bbcode-parser",
+    "description": "Parser package for vBulletin bbCode",
+    "keywords": [
+        "bbcode",
+        "vbulletin",
+        "forum"
+    ],
+    "homepage": "https://github.com/glhd/vbulletin-bbcode-parser",
+    "authors": [
+        {
+            "name": "Chris Morrell"
+        },
+        {
+            "name": "Junior Grossi",
+            "email": "juniorgro@gmail.com",
+            "homepage": "http://github.com/jgrossi"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "Galahad\\Bbcode\\" : "src/",
