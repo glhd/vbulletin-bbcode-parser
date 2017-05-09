@@ -2,7 +2,8 @@
 
 namespace Galahad\Bbcode;
 
-use Illuminate\Support\Collection;
+use Galahad\Bbcode\Exception\MissingTagException;
+use Illuminate\Support\Arr;
 
 /**
  * Class Parser
@@ -13,9 +14,22 @@ use Illuminate\Support\Collection;
 class Parser
 {
     /**
-     * @var string
+     * @var array
      */
-    protected $pattern = '/\[(\w+)(="?([\w\s+-]+)"?)?\]([^\[]+)\[\/\w+\]/i';
+    protected $urls = [];
+
+    /**
+     * @var array
+     */
+    protected $customParsers = [];
+
+    /**
+     * @param array $urls
+     */
+    public function __construct(array $urls = [])
+    {
+        $this->urls = $urls;
+    }
 
     /**
      * @param string $text
@@ -23,17 +37,41 @@ class Parser
      */
     public function parse($text)
     {
-        preg_match_all(
-            $this->pattern, $text, $matches, PREG_SET_ORDER
-        );
+        $pattern = '/\[([a-z0-9]+).*?\].*?\[\/\1\]/is';
 
-        foreach ($matches as $match) {
-            list($string, $name, , $attribute, $content) = $match;
+        return preg_replace_callback($pattern, function (array $match) {
+            return $this->parseBlock(
+                Arr::get($match, 0), Arr::get($match, 1)
+            );
+        }, $text);
+    }
 
-            $tag = new Tag($name, $content, $attribute);
-            $text = str_replace($string, $tag->render(), $text);
+    /**
+     * @param string $block
+     * @param string $tagName
+     * @return string
+     * @throws MissingTagException
+     */
+    protected function parseBlock($block, $tagName)
+    {
+        $tag = new Tag($tagName, $this->urls);
+        $tag->setCustomParsers($this->customParsers);
+
+        $text = $tag->render($block);
+
+        if ($tag->hasChildren()) {
+            return $this->parse($text);
         }
 
         return $text;
+    }
+
+    /**
+     * @param string $tag
+     * @param $callable
+     */
+    public function extend($tag, $callable)
+    {
+        $this->customParsers[$tag] = $callable;
     }
 }
