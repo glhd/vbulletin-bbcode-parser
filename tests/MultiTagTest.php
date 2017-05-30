@@ -126,7 +126,21 @@ OUTPUT;
 
         $this->assertEquals($output, $this->parser()->parse($input));
     }
-    
+
+    /**
+     * @test
+     */
+    public function withOpenTagInside()
+    {
+        $input = 'foo [b] consectetur et [b]dolore magna aliqua[/b] bar';
+        $output = 'foo [b] consectetur et <strong>dolore magna aliqua</strong> bar';
+        $this->assertEquals($output, $this->parser()->parse($input));
+
+        $input = 'foo [color] consectetur et [color=red]dolore magna aliqua[/color] bar';
+        $output = 'foo [color] consectetur et <span style="color: red;">dolore magna aliqua</span> bar';
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
     /**
      * @return Parser
      */
