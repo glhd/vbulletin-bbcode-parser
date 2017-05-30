@@ -37,7 +37,7 @@ class Parser
      */
     public function parse($text)
     {
-        $pattern = '/\[([a-z0-9]+).*?\].*?\[\/\1\]/is';
+        $pattern = '/\[([a-z0-9]+)[^\[]*(?:\[(?!\1\b)[^\[]*)*?\[\/\1\]/is';
 
         return preg_replace_callback($pattern, function (array $match) {
             return $this->parseBlock(
