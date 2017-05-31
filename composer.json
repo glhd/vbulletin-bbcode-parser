@@ -27,6 +27,7 @@
         "phpunit/phpunit": "^6.1"
     },
     "require": {
-        "illuminate/support": "^5.4"
+        "illuminate/support": "^5.4",
+        "emojione/emojione": "^3.0"
     }
 }
