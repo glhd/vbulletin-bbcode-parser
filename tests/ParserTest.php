@@ -258,6 +258,21 @@ INPUT;
         $this->assertEquals($output, $this->parser()->parse($input));
     }
 
+
+    /**
+     * @test
+     */
+    public function listWithBbcodeInside()
+    {
+        $input = <<<INPUT
+[list=a]
+[*]list [b]item[/b] 1
+[*]list item 2[/list]
+INPUT;
+        $output = '<ol type="a"><li>list <strong>item</strong> 1</li><li>list item 2</li></ol>';
+        $this->assertEquals($output, $this->parser()->parse($input));
+    }
+
     /**
      * @test
      */
