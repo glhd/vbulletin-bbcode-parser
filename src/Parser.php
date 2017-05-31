@@ -24,18 +24,25 @@ class Parser
     protected $customParsers = [];
 
     /**
+     * @var EmojiParser
+     */
+    protected $emojiParser;
+
+    /**
      * @param array $urls
      */
     public function __construct(array $urls = [])
     {
         $this->urls = $urls;
+        $this->emojiParser = new EmojiParser();
     }
 
     /**
      * @param string $text
+     * @param bool $parseEmoji
      * @return string
      */
-    public function parse($text)
+    public function parse($text, $parseEmoji = false)
     {
         $pattern = '/\[([a-z0-9]+)[^\[]*(?:\[(?!\1\b)[^\[]*)*?\[\/\1\]/is';
 
@@ -43,7 +50,7 @@ class Parser
             return $this->parseBlock(
                 Arr::get($match, 0), Arr::get($match, 1)
             );
-        }, $text);
+        }, $parseEmoji ? $this->emojiParser->parse($text) : $text);
     }
 
     /**
