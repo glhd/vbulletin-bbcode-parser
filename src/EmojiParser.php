@@ -20,9 +20,25 @@ class EmojiParser
      */
     protected $emojione;
 
+    /**
+     * @var bool
+     */
+    protected $useUnicode = true;
+
     public function __construct()
     {
         $this->emojione = $this->createEmojione();
+    }
+
+    /**
+     * @param bool $activate
+     * @return $this
+     */
+    public function unicode($activate = true)
+    {
+        $this->useUnicode = $activate;
+
+        return $this;
     }
 
     /**
@@ -32,6 +48,10 @@ class EmojiParser
     public function parse($text)
     {
         $text = $this->defaultTranslations($text);
+
+        if ($this->useUnicode) {
+            return $this->emojione->unifyUnicode($text);
+        }
 
         return $this->emojione->shortnameToImage($text);
     }
@@ -45,10 +65,9 @@ class EmojiParser
         $translations = [
             ':mrgreen:' => ':grinning:',
             ':sarcasm:' => ':upside_down:',
+            ':neutral:' => ':neutral_face:',
             '\\\:D/' => ':stuck_out_tongue:',
             ':cool-cat:' => ':smile_cat:',
-            ':D' => ':grinning:',
-            ':)' => ':slight_smile:',
         ];
 
         return str_replace(
@@ -62,7 +81,8 @@ class EmojiParser
     private function createEmojione()
     {
         $client =  new Client(new Ruleset());
-        $client->ascii = true;
+        $client->ascii = true; // allow :D ;-) =) etc
+        $client->riskyMatchAscii = false; // space required between ASCII
         $client->imagePathPNG = static::EMOJI_PATH;
 
         return $client;
