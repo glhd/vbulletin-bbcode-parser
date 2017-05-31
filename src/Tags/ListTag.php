@@ -15,7 +15,7 @@ class ListTag implements TagInterface
     /**
      * @var string
      */
-    protected $pattern = '/(?:\[\*\]\s*(.*))+/i';
+    protected $pattern = '/\[\*\]\s*((?:(?!\[\/).)*)/i';
 
     /**
      * @var mixed
