@@ -246,6 +246,16 @@ INPUT;
         $output = '<ol type="a"><li>list item 1</li><li>list item 2</li></ol>';
 
         $this->assertEquals($output, $this->parser()->parse($input));
+
+        $input = <<<INPUT
+[list=a]
+[*]list item 1
+[*]list item 2[/list]
+INPUT;
+
+        $output = '<ol type="a"><li>list item 1</li><li>list item 2</li></ol>';
+
+        $this->assertEquals($output, $this->parser()->parse($input));
     }
 
     /**
