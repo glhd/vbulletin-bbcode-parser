@@ -3,6 +3,7 @@
 namespace Galahad\Bbcode;
 
 use Emojione\Client;
+use Emojione\Ruleset;
 
 /**
  * Class EmojiParser
