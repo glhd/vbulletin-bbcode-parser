@@ -558,9 +558,7 @@ HTML;
     protected function validateAttribute()
     {
         if (empty(trim(Arr::first($this->attributes)))) {
-            throw new MissingAttributeException(sprintf(
-                'Missing attribute for [%s] tag', $this->name
-            ));
+            throw new MissingAttributeException($this->name);
         }
     }
 
@@ -581,9 +579,7 @@ HTML;
             return $url;
         }
 
-        throw new MissingUrlException(sprintf(
-            'Missing URL for [%s] tag', $this->name
-        ));
+        throw new MissingUrlException($this->name);
     }
 
     /**
@@ -604,9 +600,7 @@ HTML;
             return $this->$method($text);
         }
 
-        throw new MissingTagException(sprintf(
-            'Missing parser for [%s] tag', $this->name
-        ));
+        throw new MissingTagException($this->name);
     }
 
     /**

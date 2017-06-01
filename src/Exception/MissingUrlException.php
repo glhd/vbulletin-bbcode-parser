@@ -8,4 +8,13 @@ namespace Galahad\Bbcode\Exception;
  * @package Galahad\Bbcode\Exception
  * @author Junior Grossi <juniorgro@gmail.com>
  */
-class MissingUrlException extends \Exception {}
+class MissingUrlException extends \Exception
+{
+    /**
+     * @param string $name
+     */
+    public function __construct($name)
+    {
+        parent::__construct("Missing URL for $name tag");
+    }
+}
