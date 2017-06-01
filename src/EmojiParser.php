@@ -66,6 +66,10 @@ class EmojiParser
             ':mrgreen:' => ':grinning:',
             ':sarcasm:' => ':upside_down:',
             ':neutral:' => ':neutral_face:',
+            ':roll:' => ':rolling_eyes:',
+            ':eek:' => ':astonished:',
+            ':shock:' => ':scream:',
+            ':twisted:' => ':smiling_imp:',
             '\\\:D/' => ':stuck_out_tongue:',
             ':cool-cat:' => ':smile_cat:',
         ];
